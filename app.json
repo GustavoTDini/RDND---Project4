@@ -1,0 +1,12 @@
+{
+  "name": "RDNDProject4",
+  "displayName": "RDNDProject4",
+  "expo": {
+    "name": "RDNDProject4",
+    "slug": "RDNDProject4",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
