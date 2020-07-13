@@ -5,6 +5,11 @@
     "name": "RDNDProject4",
     "slug": "RDNDProject4",
     "version": "1.0.0",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
