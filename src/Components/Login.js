@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux'
 import { StyleSheet, Text, View, Button } from 'react-native'
+import { handleInitialData } from '../ReduxStore/actions/shared'
 
 export default function Login({ navigation }) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(handleInitialData())
+  }, [])
+
   return (
     <View style={styles.container}>
       <Text>Login</Text>
       <Button
         title="Go to List"
-        onPress={() => navigation.navigate('CardList')}
+        onPress={() => navigation.navigate('DeckList')}
       />
     </View>
   )
