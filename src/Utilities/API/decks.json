@@ -1,0 +1,106 @@
+{
+  "bd76cbeac1b146c2aed53ad53abb28ba": {
+    "id": "bd76cbeac1b146c2aed53ad53abb28ba",
+    "type": "react",
+    "title": "First Deck",
+    "cards_number": 3,
+    "author": "gustavotdini",
+    "show_image": "gs: //udacitynativecards.appspot.com/reactBackImage.jpg",
+    "date_created": 6978641924629,
+    "views_number": 30,
+    "cards": [
+      {
+        "question": "Question One",
+        "answer": "One"
+      },
+      {
+        "question": "Question Two",
+        "answer": "Two"
+      },
+      {
+        "question": "Question three",
+        "answer": "Three"
+      }
+    ]
+  },
+  "ac68afcc60548d3a4f8fbd915a97f63": {
+    "id": "ac68afcc60548d3a4f8fbd915a97f63",
+    "type": "math",
+    "title": "Second Deck",
+    "cards_number": 2,
+    "author": "isoca",
+    "show_image": "gs: //udacitynativecards.appspot.com/mathBackImage.jpg",
+    "date_created": 6978641924629,
+    "views_number": 40,
+    "cards": [
+      {
+        "question": "Question One",
+        "answer": "One"
+      },
+      {
+        "question": "Question Two",
+        "answer": "Two"
+      }
+    ]
+  },
+  "a58694a0f3da1471fbd96145571e29d72": {
+    "id": "a58694a0f3da1471fbd96145571e29d72",
+    "type": "redux",
+    "title": "Third Deck",
+    "cards_number": 5,
+    "author": "gustavotdini",
+    "show_image": "gs: //udacitynativecards.appspot.com/reduxBackImage.jpg",
+    "date_created": 6978641924629,
+    "views_number": 50,
+    "cards": [
+      {
+        "question": "Question One",
+        "answer": "One"
+      },
+      {
+        "question": "Question Two",
+        "answer": "Two"
+      },
+      {
+        "question": "Question Three",
+        "answer": "Three"
+      },
+      {
+        "question": "Question Four",
+        "answer": "Four"
+      },
+      {
+        "question": "Question Five",
+        "answer": "Five"
+      }
+    ]
+  },
+  "d58694a0f3da1471fbd56145571e29d72": {
+    "id": "d58694a0f3da1471fbd56145571e29d72",
+    "type": "science",
+    "title": "Fourth Deck",
+    "cards_number": 4,
+    "author": "marilima",
+    "show_image": "gs: //udacitynativecards.appspot.com/scienceBackImage.jpg",
+    "date_created": 6978641924629,
+    "views_number": 50,
+    "cards": [
+      {
+        "question": "Question One",
+        "answer": "One"
+      },
+      {
+        "question": "Question Two",
+        "answer": "Two"
+      },
+      {
+        "question": "Question Three",
+        "answer": "Three"
+      },
+      {
+        "question": "Question Four",
+        "answer": "Four"
+      }
+    ]
+  }
+}

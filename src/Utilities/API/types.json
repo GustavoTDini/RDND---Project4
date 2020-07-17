@@ -1,0 +1,51 @@
+{
+  "coding":
+  {
+    "name": "Coding",
+    "id": "coding",
+    "icon": "/typeIcons/coding.svg",
+    "backgroundColor": "#f9a825"
+  },
+  "react":
+  {
+    "name": "React",
+    "id": "react",
+    "icon": "/typeIcons/react.svg",
+    "backgroundColor": "#282C34"
+  },
+  "redux":
+  {
+    "name": "Redux",
+    "id": "redux",
+    "icon": "/typeIcons/redux.svg",
+    "backgroundColor": "#D4D5D8"
+  },
+  "android":
+  {
+    "name": "Android",
+    "id": "android",
+    "icon": "/typeIcons/android.svg",
+    "backgroundColor": "#D7EFFE"
+  },
+  "ios":
+  {
+    "name": "IOS",
+    "id": "ios",
+    "icon": "/typeIcons/apple.svg",
+    "backgroundColor": "#F3F3F3"
+  },
+  "science":
+  {
+    "name": "Science",
+    "id": "science",
+    "icon": "/typeIcons/dna.svg",
+    "backgroundColor": "#64dd17"
+  },
+  "math":
+  {
+    "name": "Math",
+    "id": "math",
+    "icon": "/typeIcons/calculation.svg",
+    "backgroundColor": "#dd2c00"
+  }
+}

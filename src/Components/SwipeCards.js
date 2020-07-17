@@ -1,12 +1,14 @@
 import React from 'react';
-import { Container, Header, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left } from 'native-base';
+import {useSelector} from 'react-redux'
+import { Container, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left } from 'native-base';
 
 
 export default  function SwipeCards({route}) {
   const {deckId, deckTitle} = route.params;
+
+  const cards = useSelector(state => state.decks[deckId].cards)
     return (
-      <Container>
-        <Header />
+      <Container style={{flex:1}}>
         <View>
           <DeckSwiper
             dataSource={cards}

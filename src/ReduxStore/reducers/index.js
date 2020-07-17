@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux'
-import types from './types'
-import decks from './decks'
+import { firebaseReducer } from 'react-redux-firebase'
 
 export default combineReducers({
-  types,
-  decks,
+  firebase: firebaseReducer,
 })

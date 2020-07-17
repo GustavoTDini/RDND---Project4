@@ -1,3 +1,4 @@
+
 let decks = {
   bd76cbeac1b146c2aed53ad53abb28ba:
   {
@@ -6,6 +7,7 @@ let decks = {
     title: 'First Deck',
     cards_number: 3,
     author: 'gustavotdini',
+    show_image: 'gs://udacitynativecards.appspot.com/reactBackImage.jpg',
     date_created: 6978641924629,
     views_number: 30,
     cards: [
@@ -30,6 +32,7 @@ let decks = {
     title: 'Second Deck',
     cards_number: 2,
     author: 'isoca',
+    show_image: 'gs://udacitynativecards.appspot.com/mathBackImage.jpg',
     date_created: 6978641924629,
     views_number: 40,
     cards: [
@@ -50,6 +53,7 @@ let decks = {
     title: 'Third Deck',
     cards_number: 5,
     author: 'gustavotdini',
+    show_image: 'gs://udacitynativecards.appspot.com/reduxBackImage.jpg',
     date_created: 6978641924629,
     views_number: 50,
     cards: [
@@ -82,6 +86,7 @@ let decks = {
     title: 'Fourth Deck',
     cards_number: 4,
     author: 'marilima',
+    show_image: 'gs://udacitynativecards.appspot.com/scienceBackImage.jpg',
     date_created: 6978641924629,
     views_number: 50,
     cards: [
@@ -118,7 +123,7 @@ let users = {
     password: '123',
     decks: ["d58694a0f3da1471fbd56145571e29d72"],
   },
-  gustavotdini: {
+  isoca: {
     name: 'Isadora Alves de Lima Dini',
     id: 'isoca',
     password: '123',
@@ -131,49 +136,49 @@ let types = {
   {
     name: 'Coding',
     id: 'coding',
-    icon: 'url',
+    icon: '/typeIcons/coding.svg',
     backgroundColor: '#f9a825'
   },
   react:
   {
     name: 'React',
     id: 'react',
-    icon: 'url',
+    icon: '/typeIcons/react.svg',
     backgroundColor: '#282C34'
   },
   redux:
   {
     name: 'Redux',
     id: 'redux',
-    icon: 'url',
+    icon: '/typeIcons/redux.svg',
     backgroundColor: '#D4D5D8'
   },
   android:
   {
     name: 'Android',
     id: 'android',
-    icon: 'url',
+    icon: '/typeIcons/android.svg',
     backgroundColor: '#D7EFFE'
   },
   ios:
   {
     name: 'IOS',
     id: 'ios',
-    icon: 'url',
+    icon: '/typeIcons/apple.svg',
     backgroundColor: '#F3F3F3'
   },
   science:
   {
     name: 'Science',
     id: 'science',
-    icon: 'url',
+    icon: '/typeIcons/dna.svg',
     backgroundColor: '#64dd17'
   },
   math:
   {
     name: 'Math',
     id: 'math',
-    icon: 'url',
+    icon: '/typeIcons/calculation.svg',
     backgroundColor: '#dd2c00'
   }
 }
@@ -195,3 +200,8 @@ export function _getTypes() {
     setTimeout(() => res({ ...types }), 1000)
   })
 }
+
+//<span>Photo by <a href="https://unsplash.com/@antoine1003?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Antoine Dautry</a> on <a href="https://unsplash.com/s/photos/math?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
+//<span>Photo by <a href="https://unsplash.com/@flowforfrank?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Ferenc Almasi</a> on <a href="https://unsplash.com/s/photos/react?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
+//<span>Photo by <a href="https://unsplash.com/@thisisengineering?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">ThisisEngineering RAEng</a> on <a href="https://unsplash.com/s/photos/coding-database?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
+//<span>Photo by <a href="https://unsplash.com/@f7photo?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Michael Longmire</a> on <a href="https://unsplash.com/s/photos/science?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>

@@ -1,14 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux'
+import React, {  } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native'
-import { handleInitialData } from '../ReduxStore/actions/shared'
 
 export default function Login({ navigation }) {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(handleInitialData())
-  }, [])
 
   return (
     <View style={styles.container}>

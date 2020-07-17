@@ -11,7 +11,6 @@ export function getInitialData () {
 }
 
 export function createDeckList (JsonDeckList) {
-  console.log('Json: ' + JsonDeckList)
   let deckList = []
   for ( let deck in JsonDeckList){
     deckList = deckList.concat(JsonDeckList[deck])

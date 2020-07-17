@@ -1,0 +1,20 @@
+{
+  "gustavotdini": {
+    "name": "Gustavo Trevisan Dini",
+    "id": "gustavotdini",
+    "password": "123",
+    "decks": ["a58694a0f3da1471fbd96145571e29d72", "a58694a0f3da1471fbd96145571e29d72"]
+  },
+  "marilima": {
+    "name": "Mariana Arruda Alves de Lima",
+    "id": "marilima",
+    "password": "123",
+    "decks": ["d58694a0f3da1471fbd56145571e29d72"]
+  },
+  "isoca": {
+    "name": "Isadora Alves de Lima Dini",
+    "id": "isoca",
+    "password": "123",
+    "decks": ["ac68afcc60548d3a4f8fbd915a97f63"]
+  }
+}
