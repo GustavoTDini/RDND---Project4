@@ -17,3 +17,13 @@ export function createDeckList (JsonDeckList) {
   }
   return deckList
 }
+
+export async function getAndLoadHttpUrl(firebase, ref) {
+  const iconreference = firebase.storage().ref(ref);
+  iconreference.getDownloadURL().then(url => {
+    return (url)
+  }).catch(error => {
+    console.log(error)
+    return(null)
+  })
+}

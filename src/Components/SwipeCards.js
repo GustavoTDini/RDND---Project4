@@ -1,12 +1,14 @@
 import React from 'react';
 import {useSelector} from 'react-redux'
+import { useFirebaseConnect } from 'react-redux-firebase'
 import { Container, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left } from 'native-base';
 
 
 export default  function SwipeCards({route}) {
   const {deckId, deckTitle} = route.params;
 
-  const cards = useSelector(state => state.decks[deckId].cards)
+  useFirebaseConnect(`decks/${deckId}`)
+  const cards = useSelector(state => state.firebase.data.decks[deckId].cards)
     return (
       <Container style={{flex:1}}>
         <View>

@@ -1,10 +1,15 @@
-import React from 'react'
-import { StyleSheet, Image} from 'react-native'
-import { Container, Content, Card, CardItem, Body, Text, Header, Left,Thumbnail, Button, Icon } from 'native-base';
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useFirebaseConnect } from 'react-redux-firebase'
+import { StyleSheet } from 'react-native'
+import { Container, Content, Card, CardItem, Body, Text, Left, Button, Icon, H2 } from 'native-base';
+import Thumbnail from './Thumbnail'
+import BackgroundImage from './BackgroundImage';
 
-export default function DeckDetail({route, navigation}) {
-  const {deckId} = route.params;
-  const deckTitle = 'Title'
+export default function DeckDetail({ route, navigation }) {
+  const { deckId } = route.params
+  useFirebaseConnect(`decks/${deckId}`)
+  const deck = useSelector(state => state.firebase.data.decks[deckId])
 
   const navigateToAddCard = () => (
     navigation.navigate('AddNewCard', {
@@ -12,56 +17,58 @@ export default function DeckDetail({route, navigation}) {
     })
   )
 
-    const navigateToCards = () => (
-      navigation.navigate('SwipeCards', {
+  const navigateToCards = () => (
+    navigation.navigate('SwipeCards', {
       deckId: deckId,
-      deckTitle: deckTitle
+      deckTitle: deck.title
     })
   )
 
   return (
     <Container>
-    <Content>
-      <Card style={{flex: 0}}>
-        <CardItem>
-          <Left>
-            <Thumbnail source={{uri: 'https://liferay.github.io/lexiconcss/images/thumbnail_placeholder.gif'}} />
+      <Content>
+        <Card style={{ flex: 0 }}>
+          <CardItem>
+            <Left>
+              <Thumbnail type={deck.type} />
+              <Body>
+                <H2>{deck.title}</H2>
+                <Text>Create by {deck.author}</Text>
+                <Text note>{deck.date_created}</Text>
+              </Body>
+            </Left>
+          </CardItem>
+          <CardItem>
             <Body>
-              <Text>{deckId}</Text>
-              <Text note>April 15, 2016</Text>
+              <BackgroundImage imageRef={deck.show_image} />
             </Body>
-          </Left>
-        </CardItem>
-        <CardItem>
-          <Body>
-            <Image source={{uri: 'https://liferay.github.io/lexiconcss/images/thumbnail_placeholder.gif'}} style={{height: 200, width: 200, flex: 1}}/>
-            <Text>
-              //Your text here
-            </Text>
-          </Body>
-        </CardItem>
-        <CardItem>
-          <Left>
-            <Button transparent textStyle={{color: '#87838B'}}>
-              <Icon name="logo-github" />
-              <Text>1,926 stars</Text>
+          </CardItem>
+          <CardItem>
+            <Left>
+            <Text>Cards Number</Text>
+  <Text>{deck.cards_number}</Text>
+  <Text>Total Views</Text>
+  <Text>{deck.views_number}</Text>
+            </Left>
+          </CardItem>
+
+          <CardItem style = {{flexFlow: 'column'}}>
+            <Button
+              onPress={() => navigateToCards()}>
+              <Text>Start Deck</Text>
             </Button>
-          </Left>
-        </CardItem>
-      </Card>
-      <Button
-        onPress={()=> navigateToCards()}>
-        <Text>Start Deck</Text>
-        </Button>
-      <Button>
-        <Text>Delete Deck</Text>
-      </Button>
-      <Button
-        onPress={()=> navigateToAddCard()}>
-        <Text>Add Card</Text>
-      </Button>
-    </Content>
-  </Container>
+            <Button>
+              <Text>Delete Deck</Text>
+            </Button>
+            <Button
+              onPress={() => navigateToAddCard()}>
+              <Text>Add Card</Text>
+            </Button>
+
+          </CardItem>
+        </Card>
+      </Content>
+    </Container>
   )
 }
 

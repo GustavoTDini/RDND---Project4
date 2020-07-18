@@ -11,20 +11,18 @@ export default function DeckList({ navigation }) {
   useFirebaseConnect(`decks`)
   const decks = useSelector(state => createDeckList(state.firebase.data.decks))
 
-  console.log('DECK: ' + decks)
-
   const navigateToNewDeck = () => {
     navigation.navigate('AddNewDeck')
   }
 
-  const navigateToDetail = (item) => (
+  const navigateToDetail = (itemId) => (
     navigation.navigate('DeckDetail', {
-      deckId: item.id
+      deckId: itemId
     })
   )
   
   const renderItem = ({ item }) => (
-    <DeckListItem item={item} onPress={() => navigateToDetail(item)} />
+    <DeckListItem deck={item} onPress={() => navigateToDetail(item.id)} />
   );
 
   return (
