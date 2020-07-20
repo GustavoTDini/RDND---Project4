@@ -3,104 +3,119 @@
     "id": "bd76cbeac1b146c2aed53ad53abb28ba",
     "type": "react",
     "title": "First Deck",
-    "cards_number": 3,
+    "description":"The first Test Deck",
     "author": "gustavotdini",
     "show_image": "gs: //udacitynativecards.appspot.com/reactBackImage.jpg",
     "date_created": 6978641924629,
     "views_number": 30,
-    "cards": [
-      {
+    "cards": {
+      "bd76cbeac1b146c2aed53ad53abb28ba1": {
+        "id": "bd76cbeac1b146c2aed53ad53abb28ba1",
         "question": "Question One",
         "answer": "One"
       },
-      {
+      "bd76cbeac1b146c2aed53ad53abb28ba2": {
+        "id": "bd76cbeac1b146c2aed53ad53abb28ba2",
         "question": "Question Two",
         "answer": "Two"
       },
-      {
+      "bd76cbeac1b146c2aed53ad53abb28ba3": {
+        "id": "bd76cbeac1b146c2aed53ad53abb28ba3",
         "question": "Question three",
         "answer": "Three"
       }
-    ]
+    }
   },
   "ac68afcc60548d3a4f8fbd915a97f63": {
     "id": "ac68afcc60548d3a4f8fbd915a97f63",
     "type": "math",
     "title": "Second Deck",
-    "cards_number": 2,
     "author": "isoca",
+    "description":"The second Test Deck",
     "show_image": "gs: //udacitynativecards.appspot.com/mathBackImage.jpg",
     "date_created": 6978641924629,
     "views_number": 40,
-    "cards": [
-      {
+    "cards": {
+      "ac68afcc60548d3a4f8fbd915a97f631": {
+        "id": "ac68afcc60548d3a4f8fbd915a97f631",
         "question": "Question One",
         "answer": "One"
       },
-      {
+      "ac68afcc60548d3a4f8fbd915a97f632": {
+        "id": "ac68afcc60548d3a4f8fbd915a97f632",
         "question": "Question Two",
         "answer": "Two"
       }
-    ]
+    }
   },
   "a58694a0f3da1471fbd96145571e29d72": {
     "id": "a58694a0f3da1471fbd96145571e29d72",
     "type": "redux",
     "title": "Third Deck",
-    "cards_number": 5,
     "author": "gustavotdini",
+    "description":"The third Test Deck",
     "show_image": "gs: //udacitynativecards.appspot.com/reduxBackImage.jpg",
     "date_created": 6978641924629,
     "views_number": 50,
-    "cards": [
-      {
+    "cards": {
+      "a58694a0f3da1471fbd96145571e29d721": {
+        "id": "a58694a0f3da1471fbd96145571e29d721",
         "question": "Question One",
         "answer": "One"
       },
-      {
+      "a58694a0f3da1471fbd96145571e29d722": {
+        "id": "a58694a0f3da1471fbd96145571e29d722",
         "question": "Question Two",
         "answer": "Two"
       },
-      {
+      "a58694a0f3da1471fbd96145571e29d723": {
+        "id": "a58694a0f3da1471fbd96145571e29d723",
         "question": "Question Three",
         "answer": "Three"
       },
-      {
+      "a58694a0f3da1471fbd96145571e29d724": {
+        "id": "a58694a0f3da1471fbd96145571e29d724",
         "question": "Question Four",
         "answer": "Four"
       },
-      {
+      "a58694a0f3da1471fbd96145571e29d725": {
+        "id": "a58694a0f3da1471fbd96145571e29d725",
         "question": "Question Five",
         "answer": "Five"
       }
-    ]
+    }
   },
   "d58694a0f3da1471fbd56145571e29d72": {
     "id": "d58694a0f3da1471fbd56145571e29d72",
     "type": "science",
     "title": "Fourth Deck",
+    "description":"The fourth Test Deck",
     "cards_number": 4,
     "author": "marilima",
     "show_image": "gs: //udacitynativecards.appspot.com/scienceBackImage.jpg",
     "date_created": 6978641924629,
     "views_number": 50,
-    "cards": [
-      {
+    "cards": {
+      "d58694a0f3da1471fbd56145571e29d721": {
+        "id": "d58694a0f3da1471fbd56145571e29d721",
         "question": "Question One",
         "answer": "One"
       },
-      {
+      "d58694a0f3da1471fbd56145571e29d722": {
+        "id": "d58694a0f3da1471fbd56145571e29d722",
         "question": "Question Two",
         "answer": "Two"
       },
-      {
+      "d58694a0f3da1471fbd56145571e29d723": {
+        "id": "d58694a0f3da1471fbd56145571e29d723",
         "question": "Question Three",
         "answer": "Three"
       },
-      {
+      "d58694a0f3da1471fbd56145571e29d724": {
+        "id": "d58694a0f3da1471fbd56145571e29d724",
         "question": "Question Four",
         "answer": "Four"
       }
-    ]
+    }
   }
 }

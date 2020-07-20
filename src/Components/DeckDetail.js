@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect } from 'react-redux-firebase'
 import { StyleSheet } from 'react-native'
-import { Container, Content, Card, CardItem, Body, Text, Left, Button, Icon, H2 } from 'native-base';
+import { Container, Content, Card, CardItem, Body, Text, Left, Button, H2, Right } from 'native-base';
 import Thumbnail from './Thumbnail'
 import BackgroundImage from './BackgroundImage';
 
@@ -39,20 +39,25 @@ export default function DeckDetail({ route, navigation }) {
             </Left>
           </CardItem>
           <CardItem>
-            <Body>
+            <Body style={{height: 200}}>
               <BackgroundImage imageRef={deck.show_image} />
             </Body>
           </CardItem>
           <CardItem>
-            <Left>
-            <Text>Cards Number</Text>
-  <Text>{deck.cards_number}</Text>
-  <Text>Total Views</Text>
-  <Text>{deck.views_number}</Text>
-            </Left>
+            <Body>
+              <Text>{deck.description}</Text>
+            </Body>
+          </CardItem>
+          <CardItem>
+            <Right style={{alignContent:'flex-end', marginEnd:-50}}>
+            <Text note>Cards Number: {Object.keys(deck.cards).length}</Text>
+  
+  <Text note>Total Views: {deck.views_number}</Text>
+
+            </Right>
           </CardItem>
 
-          <CardItem style = {{flexFlow: 'column'}}>
+          <CardItem style = {{flexDirection:'column'}}>
             <Button
               onPress={() => navigateToCards()}>
               <Text>Start Deck</Text>

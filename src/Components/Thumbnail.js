@@ -24,7 +24,6 @@ export default Thumbnail = (props) => {
     })
   }
 
-
   return (
     iconUrl === null ?
       <Image source={placeholder} style={styles.thumbnailContainer}/> :
@@ -38,7 +37,6 @@ export default Thumbnail = (props) => {
     </View>
   )
 }
-
 
 const styles = StyleSheet.create({
 

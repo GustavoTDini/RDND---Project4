@@ -10,12 +10,12 @@ export function getInitialData () {
   }))
 }
 
-export function createDeckList (JsonDeckList) {
-  let deckList = []
-  for ( let deck in JsonDeckList){
-    deckList = deckList.concat(JsonDeckList[deck])
+export function createList (JsonDeckList) {
+  let list = []
+  for ( let item in JsonDeckList){
+    list = list.concat(JsonDeckList[item])
   }
-  return deckList
+  return list
 }
 
 export async function getAndLoadHttpUrl(firebase, ref) {
@@ -26,4 +26,13 @@ export async function getAndLoadHttpUrl(firebase, ref) {
     console.log(error)
     return(null)
   })
+}
+
+export function formatNewCard(question, answer, questionImage, answerImage){
+  return {
+    question: question,
+    answer: answer,
+    questionImage: questionImage,
+    answerImage: answerImage
+  }
 }

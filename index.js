@@ -7,6 +7,7 @@ import firebase from './src/FireBase/firebaseConfig'
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import reducer from './src/ReduxStore/reducers'
 import middleware from './src/ReduxStore/middleware'
+import { Root } from 'native-base'
 
 const store = createStore(reducer, middleware)
 
@@ -21,7 +22,9 @@ const rrfProps = {
 const ReduxApp = () => (
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
-      <App />
+      <Root>
+        <App />
+      </Root>
     </ReactReduxFirebaseProvider>
   </Provider>
 )

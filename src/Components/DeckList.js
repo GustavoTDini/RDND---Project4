@@ -4,12 +4,12 @@ import { useFirebase, useFirebaseConnect } from 'react-redux-firebase'
 import { StyleSheet, View, FlatList} from 'react-native'
 import { Container, Fab, Footer, FooterTab, Button, Icon } from 'native-base';
 import DeckListItem from './DeckListItem';
-import { createDeckList } from '../Utilities/helperFunctions'
+import { createList } from '../Utilities/helperFunctions'
 
 
 export default function DeckList({ navigation }) {
   useFirebaseConnect(`decks`)
-  const decks = useSelector(state => createDeckList(state.firebase.data.decks))
+  const decks = useSelector(state => createList(state.firebase.data.decks))
 
   const navigateToNewDeck = () => {
     navigation.navigate('AddNewDeck')

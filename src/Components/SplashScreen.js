@@ -5,7 +5,7 @@ import { splashIcon } from '../Utilities/assets'
 export default function SplashScreen() {
   return (
     <View>
-      <Image source = {splashIcon}/>
+      <Image source = {splashIcon} resizeMode='center'/>
     </View>
   )
 }

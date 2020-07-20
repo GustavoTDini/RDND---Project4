@@ -8,10 +8,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.7.0",
     "@react-navigation/stack": "^5.7.0",
     "expo": "~38.0.1",
+    "expo-image-picker": "^8.3.0",
     "expo-splash-screen": "~0.3.1",
     "expo-status-bar": "^1.0.0",
     "expo-updates": "~0.2.10",
@@ -21,6 +23,8 @@
     "react-dom": "~16.11.0",
     "react-native": "~0.62.2",
     "react-native-gesture-handler": "~1.6.0",
+    "react-native-image-picker": "^2.3.3",
+    "react-native-image-resizer": "^1.2.3",
     "react-native-reanimated": "~1.9.0",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
