@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
-import { useFirebaseConnect, useFirebase, sto } from 'react-redux-firebase'
+import { useFirebaseConnect, useFirebase } from 'react-redux-firebase'
 import 'firebase/storage'
 import * as ImagePicker from 'expo-image-picker';
 import { Image, View } from 'react-native'
@@ -38,31 +38,38 @@ export default AddNewCard = ({ route }) => {
   const [answerImage, setAnswerImage] = useState(null)
 
 
-  saveNewCard = () => {
-
+  saveNewCard = async () => {
     let newCardKey = firebase.database().ref().child(`decks/${deckId}/cards`).push().key;
     let questionImagePath = null
     let answerImagePath = null
-
-
     if (questionImage !== null) {
       questionImagePath = `questions/${newCardKey}.jpg`
       const questionImageRef = firebase.storage().ref(questionImagePath)
-      saveImageToStorage(questionImagePath, questionImage)
+      saveImageToStorage(questionImageRef, questionImage, newCardKey)
     }
     if (answerImage !== null) {
-      answerImagePath = null `questions/${newCardKey}.jpg`
+      answerImagePath = `answers/${newCardKey}.jpg`
       const answerImageRef = firebase.storage().ref(answerImagePath)
-      saveImageToStorage(questionImagePath, answerImage)
+      saveImageToStorage(answerImageRef, answerImage, newCardKey)
     }
-    const newCard = formatNewCard(question, answer, questionImage, answerImage)
+    const newCard = formatNewCard(question, answer, questionImagePath, answerImagePath)
     firebase.update(`decks/${deckId}/cards`, { ...cards, [newCardKey]: newCard })
     navigation.goBack();
   }
 
-  saveImageToStorage = (path, imageUri) => {
-    imageUri = Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
-    return firebase.uploadFiles(path, imageUri)
+  const getFile = async (uri) => {
+    const result = await fetch(uri);
+    return result.blob();
+  }
+
+  saveImageToStorage = async (ref, imageUri, fileName) => {
+    file = await getFile(imageUri)
+      ref
+      .put(file)
+      .then((snapshot) => {
+        console.log(`${imageUri} has been successfully uploaded.`);
+      })
+      .catch((e) => console.log('uploading image error => ', e));
   }
 
   getPermissionAsync = async () => {
@@ -83,6 +90,8 @@ export default AddNewCard = ({ route }) => {
         quality: 1,
       });
       if (!result.cancelled) {
+        console.log(result)
+        console.log(result.uri.uri)
         if (type === 'question') {
           setQuestionImage(result.uri)
         }
@@ -137,6 +146,7 @@ export default AddNewCard = ({ route }) => {
       }
     )
   }
+
 
   return (
     <Container>
