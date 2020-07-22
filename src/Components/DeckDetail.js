@@ -5,11 +5,13 @@ import { StyleSheet } from 'react-native'
 import { Container, Content, Card, CardItem, Body, Text, Left, Button, H2, Right } from 'native-base';
 import Thumbnail from './Thumbnail'
 import BackgroundImage from './BackgroundImage';
-
+import { formatTime } from '../Utilities/helperFunctions'
+ 
 export default function DeckDetail({ route, navigation }) {
   const { deckId } = route.params
   useFirebaseConnect(`decks/${deckId}`)
   const deck = useSelector(state => state.firebase.data.decks[deckId])
+  console.log(deck)
 
   const navigateToAddCard = () => (
     navigation.navigate('AddNewCard', {
@@ -33,8 +35,8 @@ export default function DeckDetail({ route, navigation }) {
               <Thumbnail type={deck.type} />
               <Body>
                 <H2>{deck.title}</H2>
-                <Text>Create by {deck.author}</Text>
-                <Text note>{deck.date_created}</Text>
+                <Text>Created by {deck.author}</Text>
+                <Text note>On {formatTime(deck.date_created)}</Text>
               </Body>
             </Left>
           </CardItem>
@@ -50,7 +52,7 @@ export default function DeckDetail({ route, navigation }) {
           </CardItem>
           <CardItem>
             <Right style={{alignContent:'flex-end', marginEnd:-50}}>
-            <Text note>Cards Number: {Object.keys(deck.cards).length}</Text>
+            <Text note>Cards Number: {deck.cards? Object.keys(deck.cards).length: 0}</Text>
   
   <Text note>Total Views: {deck.views_number}</Text>
 

@@ -1,25 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Image, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase'
 import 'firebase/storage'
-import * as ImagePicker from 'expo-image-picker';
-import { Image, View } from 'react-native'
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-import { Container, Content, Form, Item, Input, Label, Text, ActionSheet, Button } from 'native-base';
-import { formatNewCard } from '../Utilities/helperFunctions';
+import { Container, Content, Form, Item, Input, Label, Text, ActionSheet, Button, Spinner } from 'native-base';
+import { formatNewCard, saveImageToStorage, getPermissionAsync,getImageFromCamera, getImageFromRoll } from '../Utilities/helperFunctions';
 import { useNavigation } from '@react-navigation/native'
-
-const IOS_BUTTONS = ["Camera", "Images", "Cancel"];
-
-const ANDROID_BUTTONS = [
-  { text: "Camera", icon: "md-camera", iconColor: "#2c8ef4" },
-  { text: "Images", icon: "md-images", iconColor: "#006600" },
-  { text: "Cancel", icon: "close", iconColor: "#cc0000" }
-];
-
-const CANCEL_INDEX = 2
+import { ANDROID_BUTTONS, IOS_BUTTONS, CANCEL_INDEX } from '../Utilities/Constants'
 
 export default AddNewCard = ({ route }) => {
   navigation = useNavigation()
@@ -36,93 +23,28 @@ export default AddNewCard = ({ route }) => {
   const [answer, setAnswer] = useState('')
   const [questionImage, setQuestionImage] = useState(null)
   const [answerImage, setAnswerImage] = useState(null)
+  const [loading, setLoading] = useState(false)
 
 
   saveNewCard = async () => {
+    setLoading(true)
     let newCardKey = firebase.database().ref().child(`decks/${deckId}/cards`).push().key;
     let questionImagePath = null
     let answerImagePath = null
     if (questionImage !== null) {
       questionImagePath = `questions/${newCardKey}.jpg`
       const questionImageRef = firebase.storage().ref(questionImagePath)
-      saveImageToStorage(questionImageRef, questionImage, newCardKey)
+      await saveImageToStorage(questionImageRef, questionImage, newCardKey)
     }
     if (answerImage !== null) {
       answerImagePath = `answers/${newCardKey}.jpg`
       const answerImageRef = firebase.storage().ref(answerImagePath)
-      saveImageToStorage(answerImageRef, answerImage, newCardKey)
+      await saveImageToStorage(answerImageRef, answerImage, newCardKey)
     }
     const newCard = formatNewCard(question, answer, questionImagePath, answerImagePath)
     firebase.update(`decks/${deckId}/cards`, { ...cards, [newCardKey]: newCard })
+    setLoading(false)
     navigation.goBack();
-  }
-
-  const getFile = async (uri) => {
-    const result = await fetch(uri);
-    return result.blob();
-  }
-
-  saveImageToStorage = async (ref, imageUri, fileName) => {
-    file = await getFile(imageUri)
-      ref
-      .put(file)
-      .then((snapshot) => {
-        console.log(`${imageUri} has been successfully uploaded.`);
-      })
-      .catch((e) => console.log('uploading image error => ', e));
-  }
-
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { colectionStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (colectionStatus !== 'granted') {
-        alert('Sorry, we need cameraroll permissions to make this work!');
-      }
-    }
-  };
-
-  getImageFromRoll = async (type) => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        console.log(result)
-        console.log(result.uri.uri)
-        if (type === 'question') {
-          setQuestionImage(result.uri)
-        }
-        if (type === 'answer') {
-          setAnswerImage(result.uri)
-        }
-      }
-    } catch (E) {
-      console.log(E);
-    }
-  }
-
-  getImageFromCamera = async (type) => {
-    try {
-      let result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        if (type === 'question') {
-          setQuestionImage(result.uri)
-        }
-        if (type === 'answer') {
-          setAnswerImage(result.uri)
-        }
-      }
-    } catch (E) {
-      console.log(E);
-    }
   }
 
   openActionSheet = (type) => {
@@ -138,10 +60,12 @@ export default AddNewCard = ({ route }) => {
       },
       buttonIndex => {
         if (buttonIndex === 0) {
-          getImageFromCamera(type)
+          getImageFromCamera().then((result) =>
+          type === 'question'? setQuestionImage(result): setAnswerImage(result))
         }
         if (buttonIndex === 1) {
-          getImageFromRoll(type)
+          getImageFromRoll().then((result) =>
+          type === 'question'? setQuestionImage(result): setAnswerImage(result))
         }
       }
     )
@@ -151,6 +75,7 @@ export default AddNewCard = ({ route }) => {
   return (
     <Container>
       <Content>
+        {loading && <Spinner />}
         <Form>
           <Item floatingLabel>
             <Label>Question</Label>

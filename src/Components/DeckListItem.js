@@ -20,7 +20,7 @@ export default function DeckListItem(props) {
         <Right>
           <View style={{ flexDirection: 'column', flex: 1, alignContent: 'center', alignItems: 'center' }}>
             <Text style={{ fontSize: 14, width: 40 }}>Cards</Text>
-            <Text>{Object.keys(props.deck.cards).length}</Text>
+            <Text>{props.deck.cards? Object.keys(props.deck.cards).length: 0}</Text>
           </View>
         </Right>
       </ListItem>
