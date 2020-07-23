@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect } from 'react-redux-firebase'
-import { Container, View, DeckSwiper, Card, CardItem, Thumbnail, Text, Left } from 'native-base';
+import { Container, View, DeckSwiper, Card, Text, Content } from 'native-base';
 import { createList } from '../Utilities/helperFunctions'
+import FlipCard from './FlipCard';
 
 
 export default function SwipeCards({ route }) {
@@ -16,15 +17,14 @@ export default function SwipeCards({ route }) {
         <DeckSwiper
           dataSource={cards}
           renderItem={item =>
-            <Card style={{ elevation: 3 }}>
-              <CardItem>
-                <Text>{deckTitle}</Text>
-              </CardItem>
-              <CardItem cardBody>
-                <Text>{item.question}</Text>
-                <Text note>{item.answer}</Text>
-              </CardItem>
-            </Card>
+            <Content id={item.id}>
+              <Text>{deckTitle}</Text>
+              <Card style={{ elevation: 3 }}>
+                <FlipCard
+                  question = {item.question}
+                  answer = {item.answer}/>
+              </Card>
+            </Content>
           }
         />
       </View>

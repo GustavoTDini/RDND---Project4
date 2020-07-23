@@ -34,12 +34,12 @@ export default AddNewCard = ({ route }) => {
     if (questionImage !== null) {
       questionImagePath = `questions/${newCardKey}.jpg`
       const questionImageRef = firebase.storage().ref(questionImagePath)
-      await saveImageToStorage(questionImageRef, questionImage, newCardKey)
+      await saveImageToStorage(questionImageRef, questionImage)
     }
     if (answerImage !== null) {
       answerImagePath = `answers/${newCardKey}.jpg`
       const answerImageRef = firebase.storage().ref(answerImagePath)
-      await saveImageToStorage(answerImageRef, answerImage, newCardKey)
+      await saveImageToStorage(answerImageRef, answerImage)
     }
     const newCard = formatNewCard(question, answer, questionImagePath, answerImagePath)
     firebase.update(`decks/${deckId}/cards`, { ...cards, [newCardKey]: newCard })
