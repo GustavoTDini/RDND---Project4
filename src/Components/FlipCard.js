@@ -1,88 +1,25 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Text, View, Animated, Button } from 'react-native'
+import React, { useRef } from 'react'
+import { StyleSheet, Text, Pressable } from 'react-native'
+import { TouchableOpacity, TouchableHighlight } from 'react-native-gesture-handler';
+import CardFlip from 'react-native-card-flip';
 
 export default function FlipCard(props) {
-
-
-  let value = 0;
-  let animatedValue = new Animated.Value(0);
-
-  let frontInterpolate = animatedValue.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['0deg', '180deg'],
-  })
-  let backInterpolate = animatedValue.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['180deg', '360deg']
-  })
-
-
-  useEffect(() => {
-    value = 0;
-    animatedValue = new Animated.Value(0);
-    animatedValue.addListener(({ value }) => {
-      value = value;
-    })
-    frontInterpolate = animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['0deg', '180deg'],
-    })
-    backInterpolate = animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['180deg', '360deg']
-    })
-  }, [])
-
-  const flipCard = () => {
-    if (value >= 90) {
-      // Animated.spring(animatedValue, {
-      //   toValue: 0,
-      //   friction: 8,
-      //   tension: 10
-      // }).start();
-    } else {
-      Animated.spring(animatedValue, {
-        toValue: 180,
-        friction: 8,
-        tension: 10
-        
-      }).start();
-    }
-  }
-  const frontAnimatedStyle = {
-    transform: [
-      { rotateY: frontInterpolate }
-    ]
-  }
-  const backAnimatedStyle = {
-    transform: [
-      { rotateY: backInterpolate }
-    ]
-  }
+  const cardRef = useRef(props.id);
 
   return (
-    <View>
-      <View>
-        <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-          <Text style={styles.flipText}>
-            {props.question}
-          </Text>
-        </Animated.View>
-        <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
-          <Text style={styles.flipText}>
-            {props.answer}
-          </Text>
-        </Animated.View>
-      </View>
-      <Button
-        title="Show Answer"
-        onPress={() => flipCard()} />
-    </View>
+    <CardFlip style={styles.container} ref={cardRef} >
+      <TouchableHighlight activeOpacity={0.4} underlayColor="#ff0000" style={styles.flipCard} onLongPress={() => cardRef.current.flip()} ><Text>{props.question}</Text></TouchableHighlight>
+      <TouchableHighlight activeOpacity={0.4} underlayColor="#00ff00" style={styles.flipCardBack} onLongPress={() => cardRef.current.flip()} ><Text>{props.answer}</Text></TouchableHighlight>
+    </CardFlip>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    margin: 20,
+    borderRadius: 10,
+    width: 400,
+    height: 500,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -90,21 +27,17 @@ const styles = StyleSheet.create({
   flipCard: {
     width: 400,
     height: 500,
+
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
-    backfaceVisibility: 'hidden',
+    backgroundColor: 'red'
   },
   flipCardBack: {
-    backgroundColor: "white",
-    position: "absolute",
-    top: 0,
-  },
-  flipText: {
-    width: 90,
-    fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
+    width: 400,
+    height: 500,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'green'
   }
 });
 

@@ -1,51 +1,44 @@
 {
-  "coding":
-  {
-    "name": "Coding",
-    "id": "coding",
-    "icon": "/typeIcons/coding.svg",
-    "backgroundColor": "#f9a825"
+  "android" : {
+    "backgroundColor" : "#D7EFFE",
+    "icon" : "/topicIcons/android.svg",
+    "id" : "android",
+    "name" : "Android"
   },
-  "react":
-  {
-    "name": "React",
-    "id": "react",
-    "icon": "/typeIcons/react.svg",
-    "backgroundColor": "#282C34"
+  "coding" : {
+    "backgroundColor" : "#f9a825",
+    "icon" : "/topicIcons/coding.svg",
+    "id" : "coding",
+    "name" : "Coding"
   },
-  "redux":
-  {
-    "name": "Redux",
-    "id": "redux",
-    "icon": "/typeIcons/redux.svg",
-    "backgroundColor": "#D4D5D8"
+  "ios" : {
+    "backgroundColor" : "#F3F3F3",
+    "icon" : "/topicIcons/apple.svg",
+    "id" : "ios",
+    "name" : "IOS"
   },
-  "android":
-  {
-    "name": "Android",
-    "id": "android",
-    "icon": "/typeIcons/android.svg",
-    "backgroundColor": "#D7EFFE"
+  "math" : {
+    "backgroundColor" : "#dd2c00",
+    "icon" : "/topicIcons/abacus.svg",
+    "id" : "math",
+    "name" : "Math"
   },
-  "ios":
-  {
-    "name": "IOS",
-    "id": "ios",
-    "icon": "/typeIcons/apple.svg",
-    "backgroundColor": "#F3F3F3"
+  "react" : {
+    "backgroundColor" : "#282C34",
+    "icon" : "/topicIcons/react.svg",
+    "id" : "react",
+    "name" : "React"
   },
-  "science":
-  {
-    "name": "Science",
-    "id": "science",
-    "icon": "/typeIcons/dna.svg",
-    "backgroundColor": "#64dd17"
+  "redux" : {
+    "backgroundColor" : "#D4D5D8",
+    "icon" : "/topicIcons/redux.svg",
+    "id" : "redux",
+    "name" : "Redux"
   },
-  "math":
-  {
-    "name": "Math",
-    "id": "math",
-    "icon": "/typeIcons/calculation.svg",
-    "backgroundColor": "#dd2c00"
+  "science" : {
+    "backgroundColor" : "#64dd17",
+    "icon" : "/topicIcons/microscope.svg",
+    "id" : "science",
+    "name" : "Science"
   }
 }
