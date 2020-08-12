@@ -29,13 +29,13 @@ export function formatNewCard(question, answer, questionImage, answerImage) {
   }
 }
 
-export function formatNewDeck(id, author, title, description, type, image) {
+export function formatNewDeck(id, author, title, description, topic, image) {
   return {
     id: id,
     author: author,
     title: title,
     description: description,
-    type: type,
+    topic: topic,
     show_image: image,
     views_number: 0,
     date_created: Date.now(),

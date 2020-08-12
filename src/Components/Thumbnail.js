@@ -3,20 +3,20 @@ import { useSelector } from 'react-redux'
 import { useFirebase } from 'react-redux-firebase'
 import { StyleSheet, View, Image, Platform } from 'react-native'
 import { SvgUri } from 'react-native-svg'
-import {  placeholder } from '../Utilities/assets'
+import {  placeholder } from '../Assets'
 
 export default Thumbnail = (props) => {
-  const type = useSelector(state => state.firebase.data.types[props.type])
+  const topic = useSelector(state => state.firebase.data.topics[props.topic])
 
   const firebase = useFirebase()
   const [iconUrl, setIconUrl] = useState(null)
 
   useEffect(() => {
     getAndLoadHttpUrl()
-  }, [type])
+  }, [topic])
 
   async function getAndLoadHttpUrl() {
-    const iconreference = firebase.storage().ref(type.icon);
+    const iconreference = firebase.storage().ref(topic.icon);
     iconreference.getDownloadURL().then(url => {
       setIconUrl(url)
     }).catch(error => {
@@ -27,7 +27,7 @@ export default Thumbnail = (props) => {
   return (
     iconUrl === null ?
       <Image source={placeholder} style={styles.thumbnailContainer}/> :
-      <View style={[{ backgroundColor: [type.backgroundColor] }, styles.thumbnailContainer]} >
+      <View style={[{ backgroundColor: [topic.backgroundColor] }, styles.thumbnailContainer]} >
         <SvgUri
           style={{ marginTop: 4 }}
           width='80%'

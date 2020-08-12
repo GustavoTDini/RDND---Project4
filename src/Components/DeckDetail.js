@@ -11,7 +11,6 @@ export default function DeckDetail({ route, navigation }) {
   const { deckId } = route.params
   useFirebaseConnect(`decks/${deckId}`)
   const deck = useSelector(state => state.firebase.data.decks[deckId])
-  console.log(deck)
 
   const navigateToAddCard = () => (
     navigation.navigate('AddNewCard', {
@@ -32,7 +31,7 @@ export default function DeckDetail({ route, navigation }) {
         <Card style={{ flex: 0 }}>
           <CardItem>
             <Left>
-              <Thumbnail type={deck.type} />
+              <Thumbnail topic={deck.topic} />
               <Body>
                 <H2>{deck.title}</H2>
                 <Text>Created by {deck.author}</Text>

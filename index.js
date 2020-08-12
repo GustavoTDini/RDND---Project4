@@ -9,6 +9,8 @@ import reducer from './src/ReduxStore/reducers'
 import middleware from './src/ReduxStore/middleware'
 import { Root } from 'native-base'
 
+
+
 const store = createStore(reducer, middleware)
 
 const rrfProps = {

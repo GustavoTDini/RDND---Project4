@@ -206,3 +206,4 @@ export function _getTypes() {
 //<span>Photo by <a href="https://unsplash.com/@thisisengineering?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">ThisisEngineering RAEng</a> on <a href="https://unsplash.com/s/photos/coding-database?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
 //<span>Photo by <a href="https://unsplash.com/@f7photo?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Michael Longmire</a> on <a href="https://unsplash.com/s/photos/science?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
 //<a href="https://iconscout.com/icons/questionnaire" target="_blank">Questionnaire Icon</a> by <a href="https://iconscout.com/contributors/jemismali">Jemis Mali</a> on <a href="https://iconscout.com">Iconscout</a>
+//<a href='https://br.freepik.com/vetores/verde'>Verde vetor criado por freepik - br.freepik.com</a>

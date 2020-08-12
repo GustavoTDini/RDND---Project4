@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Image } from 'react-native'
 import { useFirebase } from 'react-redux-firebase'
-import { placeholder } from '../Utilities/assets'
+import { placeholder } from '../Assets'
 
 export default BackgroundImage = (props) => {
 

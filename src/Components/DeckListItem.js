@@ -5,13 +5,14 @@ import Thumbnail from './Thumbnail'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function DeckListItem(props) {
+  console.log(props.deck)
 
   return (
     <TouchableOpacity
       onPress={props.onPress}>
       <ListItem>
         <Left style={{ flex: 1 }}>
-          <Thumbnail type={props.deck.type} />
+          <Thumbnail topic={props.deck.topic} />
         </Left>
         <View style={{ flexDirection: 'column', flex: 3 }}>
           <H3>{props.deck.title}</H3>

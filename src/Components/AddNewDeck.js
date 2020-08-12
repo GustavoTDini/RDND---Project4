@@ -11,8 +11,8 @@ import { ANDROID_BUTTONS, IOS_BUTTONS, CANCEL_INDEX } from '../Utilities/Constan
 export default AddNewDeck = () => {
   navigation = useNavigation()
   const firebase = useFirebase()
-  useFirebaseConnect(`types`)
-  const types = useSelector(state => createList(state.firebase.data.types))
+  useFirebaseConnect(`topics`)
+  const topics = useSelector(state => createList(state.firebase.data.topics))
 
   useEffect(() => {
     getPermissionAsync();
@@ -21,7 +21,7 @@ export default AddNewDeck = () => {
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState(null)
-  const [type, setType] = useState('')
+  const [topic, setTopic] = useState('')
   const [image, setImage] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -36,7 +36,7 @@ export default AddNewDeck = () => {
       const imageRef = firebase.storage().ref(imagePath)
       await saveImageToStorage(imageRef, image)
     }
-    const newDeck = formatNewDeck(newDeckKey,author, title, description, type, imagePath)
+    const newDeck = formatNewDeck(newDeckKey,author, title, description, topic, imagePath)
     firebase.update('decks', { [newDeckKey]: newDeck })
     setLoading(false)
     navigation.goBack();
@@ -106,15 +106,15 @@ export default AddNewDeck = () => {
           <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
-              placeholder="Select your deck Type"
+              placeholder="Select your deck Topic"
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
               style={{ width: undefined }}
-              selectedValue={type}
-              onValueChange={setType}
+              selectedValue={topic}
+              onValueChange={setTopic}
             >
-              {types.map((type) => (
-                <Picker.Item key={type.id} label={type.name} value={type.id} />
+              {topics.map((topic) => (
+                <Picker.Item key={topic.id} label={topic.name} value={topic.id} />
               ))}
             </Picker>
             <Button

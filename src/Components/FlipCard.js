@@ -1,44 +1,91 @@
 import React, { useRef } from 'react'
-import { StyleSheet, Text, Pressable } from 'react-native'
-import { TouchableOpacity, TouchableHighlight } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View } from 'react-native'
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import CardFlip from 'react-native-card-flip';
+import { Audio } from 'expo-av';
+import BackgroundImage from './BackgroundImage';
 
 export default function FlipCard(props) {
   const cardRef = useRef(props.id);
 
+  flipSound = async (ref, show) => {
+    try {
+      const { sound: soundObject, status } = await Audio.Sound.createAsync(
+        require('../Assets/Sounds/Card-flip-sound-effect.mp3'),
+        { shouldPlay: true }
+      );
+    } catch (error) {
+      console.log(error)
+    }
+    ref.current.flip()
+    props.showAnswer(show)
+  }
+
   return (
-    <CardFlip style={styles.container} ref={cardRef} >
-      <TouchableHighlight activeOpacity={0.4} underlayColor="#ff0000" style={styles.flipCard} onLongPress={() => cardRef.current.flip()} ><Text>{props.question}</Text></TouchableHighlight>
-      <TouchableHighlight activeOpacity={0.4} underlayColor="#00ff00" style={styles.flipCardBack} onLongPress={() => cardRef.current.flip()} ><Text>{props.answer}</Text></TouchableHighlight>
-    </CardFlip>
+    <View style={styles.container}>
+      <CardFlip style={styles.Cardcontainer} ref={cardRef} >
+        <TouchableHighlight
+          activeOpacity={0.4}
+          underlayColor="#ff0000"
+          style={styles.card}
+          onLongPress={() => flipSound(cardRef, true)} >
+          <View style={styles.cardContent}>
+            {props.question && <Text>{props.question}</Text>}
+            {props.questionImage && <BackgroundImage imageRef={props.questionImage} />}
+            <Text>Press to see Answer</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          activeOpacity={0.4}
+          underlayColor="#00ff00"
+          style={[styles.card, styles.flipCardBack]}
+          onLongPress={() => flipSound(cardRef, false)}>
+          <View style={styles.cardContent}>
+            {props.answer && <Text>{props.answer}</Text>}
+            {props.AnswerImage && <BackgroundImage imageRef={props.AnswerImage} />}
+            <Text>Press to return to Question</Text>
+          </View>
+        </TouchableHighlight>
+      </CardFlip>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
-    borderRadius: 10,
-    width: 400,
-    height: 500,
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  flipCard: {
-    width: 400,
-    height: 500,
-
+  Cardcontainer: {
+    width: 320,
+    height: 470,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'red'
+  },
+  card: {
+    width: 320,
+    height: 470,
+    backgroundColor: '#FE474C',
+    borderRadius: 5,
+    shadowColor: 'rgba(0,0,0,0.5)',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
   },
   flipCardBack: {
-    width: 400,
-    height: 500,
+    backgroundColor: 'green'
+  },
+  cardContent:{
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'green'
-  }
+    flex: 1,
+    margin:10,
+    backgroundColor: 'white',
+    borderRadius: 3,
+  },
 });
 
 

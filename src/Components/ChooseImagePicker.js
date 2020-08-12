@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
+import { Button, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { ActionSheet } from "native-base";
-
 
 
 export default ChooseImagePicker = (props) => {
@@ -33,7 +32,7 @@ export default ChooseImagePicker = (props) => {
       });
       if (!result.cancelled) {
         setimage(result.uri)
-        props.setUrl(result.uri)
+        props.setUrl(image)
       }
     } catch (E) {
       console.log(E);
@@ -50,7 +49,7 @@ export default ChooseImagePicker = (props) => {
       });
       if (!result.cancelled) {
         setimage(result.uri)
-        props.setUrl(result.uri)
+        props.setUrl(image)
       }
     } catch (E) {
       console.log(E);
@@ -73,15 +72,14 @@ export default ChooseImagePicker = (props) => {
           getImageFromCamera()
         }
         if (buttonIndex === 1) {
-          etImageFromRoll()
+          getImageFromRoll()
         }
       }
     )
   }
 
   return (
-    
-      <Button title={props.buttonMessage} onPress={() => openActionSheet()} />
+    <Button title={props.buttonMessage} onPress={() => openActionSheet()} />
   );
 
 }

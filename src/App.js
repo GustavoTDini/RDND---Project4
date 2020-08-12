@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -13,22 +13,34 @@ import SwipeCards from './Components/SwipeCards'
 import AddNewCard from './Components/AddNewCard'
 import AddNewDeck from './Components/AddNewDeck'
 import SplashScreen from './Components/SplashScreen';
+import * as Font from 'expo-font';
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  useFirebaseConnect('types');
+  useFirebaseConnect('topics');
+  const [splash, setSplash] = useState(true)
+  const auth = useSelector(state => state.firebase.auth)
 
-  function AuthIsLoaded({ children }) {
-    const auth = useSelector(state => state.firebase.auth)
-    if (!isLoaded(auth)) return <SplashScreen />;
+  useEffect(() => {
+    setTimeout(() => {
+      setSplash(false)
+    }, 3000);
+    (async () => await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    }))();
+  }, [])
+
+  function Loading({ children }) {
+    if (splash) return <SplashScreen />;
     return children
   }
 
   return (
     <Container>
-      <NavigationContainer>
-        <AuthIsLoaded>
+      <Loading>
+        <NavigationContainer>
           <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="DeckList" component={DeckList} />
@@ -37,9 +49,8 @@ export default function App() {
             <Stack.Screen name="AddNewCard" component={AddNewCard} />
             <Stack.Screen name="AddNewDeck" component={AddNewDeck} />
           </Stack.Navigator>
-        </AuthIsLoaded>
-      </NavigationContainer>
-
+        </NavigationContainer>
+      </Loading>
       <StatusBar style="dark" />
     </Container>
   );
