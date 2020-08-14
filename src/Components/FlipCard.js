@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import CardFlip from 'react-native-card-flip';
@@ -7,8 +7,10 @@ import BackgroundImage from './BackgroundImage';
 
 export default function FlipCard(props) {
   const cardRef = useRef(props.id);
+  const [showButtons, setShowButtons] = useState(false)
 
   flipSound = async (ref, show) => {
+    setShowButtons(show)
     try {
       const { sound: soundObject, status } = await Audio.Sound.createAsync(
         require('../Assets/Sounds/Card-flip-sound-effect.mp3'),
@@ -18,7 +20,8 @@ export default function FlipCard(props) {
       console.log(error)
     }
     ref.current.flip()
-    props.showAnswer(show)
+    
+    props.showAnswer(showButtons)
   }
 
   return (

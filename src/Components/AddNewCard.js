@@ -80,7 +80,6 @@ export default AddNewCard = ({ route }) => {
           <Item floatingLabel>
             <Label>Question</Label>
             <Input
-              getRef={(input) => { this.textInput = input }}
               onChangeText={text => setQuestion(text)}
               value={question}
             />
@@ -96,7 +95,6 @@ export default AddNewCard = ({ route }) => {
           <Item floatingLabel last>
             <Label>Answer</Label>
             <Input
-              getRef={(input) => { this.textInput = input }}
               onChangeText={text => setAnswer(text)}
               value={answer}
             />

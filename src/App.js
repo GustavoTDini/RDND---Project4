@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Container } from 'native-base';
 import Login from './Components/Login';
-import { useFirebaseConnect, isLoaded } from 'react-redux-firebase'
+import { useFirebaseConnect, isLoaded, isEmpty} from 'react-redux-firebase'
 import DeckList from './Components/DeckList';
 import DeckDetail from './Components/DeckDetail'
 import SwipeCards from './Components/SwipeCards'
@@ -26,6 +26,7 @@ export default function App() {
     setTimeout(() => {
       setSplash(false)
     }, 3000);
+  
     (async () => await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
@@ -37,17 +38,23 @@ export default function App() {
     return children
   }
 
+
   return (
     <Container>
       <Loading>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="DeckList" component={DeckList} />
-            <Stack.Screen name="DeckDetail" component={DeckDetail} />
-            <Stack.Screen name="SwipeCards" component={SwipeCards} />
-            <Stack.Screen name="AddNewCard" component={AddNewCard} />
-            <Stack.Screen name="AddNewDeck" component={AddNewDeck} />
+          <Stack.Navigator initialRouteName={isLoaded(auth) && !isEmpty(auth) ? "Login":"DeckList"}>
+            {isLoaded(auth) && !isEmpty(auth) ?
+              <>
+                <Stack.Screen name="DeckList" component={DeckList} />
+                <Stack.Screen name="DeckDetail" component={DeckDetail} />
+                <Stack.Screen name="SwipeCards" component={SwipeCards} />
+                <Stack.Screen name="AddNewCard" component={AddNewCard} />
+                <Stack.Screen name="AddNewDeck" component={AddNewDeck} />
+              </> :
+              <>
+                <Stack.Screen name="Login" component={Login} />
+              </>}
           </Stack.Navigator>
         </NavigationContainer>
       </Loading>
