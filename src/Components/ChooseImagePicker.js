@@ -12,6 +12,8 @@ export default ChooseImagePicker = (props) => {
   useEffect(() => {
     getPermissionAsync();
   }, [])
+  
+  // TODO - Correct Permissions
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {

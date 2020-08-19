@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { StyleSheet, Image, View, Animated } from 'react-native'
+import { Container, Content } from 'native-base';
 import { splashIcon } from '../Assets'
 
 export default function SplashScreen() {
@@ -15,14 +16,16 @@ export default function SplashScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Animated.Image source = {splashIcon} style = {{opacity}} resizeMode='contain'/>
-    </View>
+    <Container>
+      <Content>
+        <Animated.Image source = {splashIcon} style = {{opacity}} resizeMode='center'/>
+      </Content>
+    </Container>
   )
 }
 
 const styles = StyleSheet.create({
-  container:{
+  content:{
     flex: 1,
     marginTop: 'auto',
     alignContent:'center',

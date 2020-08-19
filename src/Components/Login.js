@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'
 import { StyleSheet, View } from 'react-native'
-import { useFirebase, isLoaded, isEmpty  } from 'react-redux-firebase'
-import { Container, Form, Item, Input, Label, Text, Button, Content, Toast } from 'native-base'
+import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
+import { Container, Form, Item, Input, Label, Text, Button, Content, Toast, H1, H3 } from 'native-base'
 
 export default function Login() {
   const firebase = useFirebase()
@@ -28,10 +28,11 @@ export default function Login() {
     )
   }
 
+
+  //TODO Add a User to a auth Profile
   function createNewUserEmail({ email, password, username }) {
     firebase.createUser(
-      { email, password },
-      { username, email }
+      { email, password }
     ).then(
       setLoginCreate(true)
     ).catch(
@@ -48,8 +49,9 @@ export default function Login() {
 
   return (
     <Container>
-      <Content>
-        <Text>{login ? 'Login' : 'Create New User'}</Text>
+      <Content style={styles.content}>
+        <H1 style={styles.titles}>Udacity Native Cards</H1>
+        <H3 style={styles.titles}>{login ? 'Login' : 'Create New User'}</H3>
         <Form>
           {!login &&
             <Item floatingLabel>
@@ -69,27 +71,38 @@ export default function Login() {
           <Item floatingLabel>
             <Label>Password</Label>
             <Input
-              textContentType='password'
+              secureTextEntry={true}
               onChangeText={text => setPassword(text)}
               value={password}
             />
           </Item>
         </Form>
-
         {login ?
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button onPress={() => loginWithEmail()}>
+          <View style={styles.buttonContainer}>
+            <Button
+              style={styles.button}
+              block
+              onPress={() => loginWithEmail()}>
               <Text>Login</Text>
             </Button>
-            <Button onPress={() => setLoginCreate(false)}>
+            <Button
+              style={styles.button}
+              block
+              onPress={() => setLoginCreate(false)}>
               <Text>Create New User</Text>
             </Button>
           </View> :
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button onPress={() => createNewUserEmail()}>
+            <Button
+              style={styles.button}
+              block
+              onPress={() => createNewUserEmail()}>
               <Text>Create User</Text>
             </Button>
-            <Button onPress={() => setLoginCreate(true)}>
+            <Button
+              style={styles.button}
+              block
+              onPress={() => setLoginCreate(true)}>
               <Text>Return</Text>
             </Button>
           </View>
@@ -101,11 +114,19 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  content:{
+    marginTop: 30
+  },
+  titles:{
+    marginTop: 30,
+    textAlign: 'center'
+  },
+  buttonContainer: {
     flex: 1,
-    color: 'black',
-    backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
+  },
+  button: {
+    margin: 20
   },
 })

@@ -33,15 +33,6 @@ export default function DeckList({ navigation }) {
 
   return (
     <Container>
-      {Platform.OS === 'android' ?
-        <Header translucent>
-          <Left>
-            <Button
-              onPress={() => logout()}>
-              <Icon name='log-out' />
-            </Button>
-          </Left>
-        </Header> : null}
       <FlatList
         data={decks}
         renderItem={item => renderItem(item)}
@@ -52,12 +43,12 @@ export default function DeckList({ navigation }) {
           <FooterTab>
             <Button
               onPress={() => logout()}>
-              <Icon name="log-out" style={{ fontSize: 30 }} />
+              <Icon name="log-out" style={styles.iosIcons}/>
             </Button>
             <View style={{ flex: 1 }} />
             <Button
               onPress={() => navigateToNewDeck()}>
-              <Icon name="ios-create" style={{ fontSize: 30 }} />
+              <Icon name="ios-create" style={styles.iosIcons} />
             </Button>
           </FooterTab>
         </Footer>
@@ -77,5 +68,10 @@ export default function DeckList({ navigation }) {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  iosIcons:{
+    fontSize: 30,
+    color: '#529FF3'
+  }
+})
 

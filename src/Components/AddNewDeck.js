@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase'
 import 'firebase/storage'
 import { Container, Content, Form, Item, Input, Label, Text, ActionSheet, Button, Spinner, Picker, Icon } from 'native-base';
-import { saveImageToStorage, getPermissionAsync,getImageFromCamera, getImageFromRoll, createList, formatNewDeck } from '../Utilities/helperFunctions';
+import { saveImageToStorage, getPermissionAsync, getImageFromCamera, getImageFromRoll, createList, formatNewDeck } from '../Utilities/helperFunctions';
 import { useNavigation } from '@react-navigation/native'
 import { ANDROID_BUTTONS, IOS_BUTTONS, CANCEL_INDEX } from '../Utilities/Constants'
 
@@ -13,6 +13,8 @@ export default AddNewDeck = () => {
   const firebase = useFirebase()
   useFirebaseConnect(`topics`)
   const topics = useSelector(state => createList(state.firebase.data.topics))
+  const auth = useSelector(state => state.firebase.auth)
+  console.log('Auth: ' + JSON.stringify(auth))
 
   useEffect(() => {
     getPermissionAsync();
@@ -25,7 +27,7 @@ export default AddNewDeck = () => {
   const [image, setImage] = useState(false)
   const [loading, setLoading] = useState(false)
 
-
+  //TODO : Add author from auth
 
   saveNewDeck = async () => {
     setLoading(true)
@@ -36,7 +38,7 @@ export default AddNewDeck = () => {
       const imageRef = firebase.storage().ref(imagePath)
       await saveImageToStorage(imageRef, image)
     }
-    const newDeck = formatNewDeck(newDeckKey,author, title, description, topic, imagePath)
+    const newDeck = formatNewDeck(newDeckKey, author, title, description, topic, imagePath, authorId)
     firebase.update('decks', { [newDeckKey]: newDeck })
     setLoading(false)
     navigation.goBack();
@@ -57,26 +59,24 @@ export default AddNewDeck = () => {
       buttonIndex => {
         if (buttonIndex === 0) {
           getImageFromCamera().then((result) =>
-          setImage(result))
+            setImage(result))
         }
         if (buttonIndex === 1) {
           getImageFromRoll().then((result) =>
-          setImage(result))
+            setImage(result))
         }
       }
     )
   }
 
-
   return (
     <Container>
       <Content>
-        {loading &&  <Spinner />}
+        {loading && <Spinner />}
         <Form>
           <Item floatingLabel>
             <Label>Title</Label>
             <Input
-              getRef={(input) => { this.textInput = input }}
               onChangeText={text => setTitle(text)}
               value={title}
             />
@@ -84,7 +84,6 @@ export default AddNewDeck = () => {
           <Item floatingLabel>
             <Label>Description</Label>
             <Input
-              getRef={(input) => { this.textInput = input }}
               onChangeText={text => setDescription(text)}
               value={description}
             />
@@ -92,32 +91,37 @@ export default AddNewDeck = () => {
           <Item floatingLabel>
             <Label>Author</Label>
             <Input
-              getRef={(input) => { this.textInput = input }}
               onChangeText={text => setAuthor(text)}
               value={author}
             />
           </Item>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button onPress={() => openActionSheet()}>
+          <Picker
+            mode="dropdown"
+            iosIcon={<Icon name="arrow-down" />}
+            placeholder="Select your deck topic"
+            placeholderStyle={{ color: "#bfc6ea" }}
+            placeholderIconColor="#007aff"
+            selectedValue={topic}
+            onValueChange={setTopic}
+            style={styles.picker}
+          >
+            {topics.map((topic) => (
+              <Picker.Item key={topic.id} label={topic.name} value={topic.id} />
+            ))}
+          </Picker>
+          <View style={styles.imageBlock}>
+            <Button
+              block
+              style={styles.button}
+              onPress={() => openActionSheet()}>
               <Text>Select an image for your deck</Text>
             </Button>
-            {image && <Image source={{ uri: image }} style={{ width: 300, height: 200 }} />}
+            {image && <Image source={{ uri: image }} style={styles.imageSize} />}
           </View>
-          <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              placeholder="Select your deck Topic"
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
-              style={{ width: undefined }}
-              selectedValue={topic}
-              onValueChange={setTopic}
-            >
-              {topics.map((topic) => (
-                <Picker.Item key={topic.id} label={topic.name} value={topic.id} />
-              ))}
-            </Picker>
-            <Button
+          <Button
+            style={styles.button}
+            block
+            transparent={Platform.OS === 'ios' ? true : false}
             onPress={() => saveNewDeck()}>
             <Text>Create new Deck</Text>
           </Button>
@@ -127,4 +131,20 @@ export default AddNewDeck = () => {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  button: {
+    margin: 20
+  },
+  picker: {
+    marginTop: 20
+  },
+  imageBlock: {
+    flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  imageSize:{
+    width: 300, 
+    height: 200
+  }
+})

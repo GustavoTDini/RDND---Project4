@@ -1,20 +1,21 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect } from 'react-redux-firebase'
-import { StyleSheet, Platform, Image } from 'react-native'
-import { Container, View, Text, Button } from 'native-base';
+import { StyleSheet, Platform, Image, View, Text } from 'react-native'
 import { createList } from '../Utilities/helperFunctions'
 import FlipCard from './FlipCard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CardStack, { Card } from 'react-native-card-stack-swiper';
-import { checkIos, wrongIos, checkAndroid, wrongAndroid } from '../Assets'
+import { checkIos, wrongIos, checkAndroid, wrongAndroid, backAndroid, backIos } from '../Assets'
+import { useNavigation } from '@react-navigation/native';
 
 export default function SwipeCards({ route }) {
+  const navigation = useNavigation()
   const swiperRef = useRef(null)
   const { deckId, deckTitle } = route.params;
   const [currentCard, setCurrentCard] = useState(0)
   const [rightCounts, setRightCounts] = useState(0)
-  const [showButtons, setShowButtons] = useState(false)
+  const [showButtons, setShowButtons] = useState(true)
 
 
   useFirebaseConnect(`decks/${deckId}`)
@@ -25,9 +26,8 @@ export default function SwipeCards({ route }) {
   }, [deck])
   const [deck, setDeck] = useState(cards)
 
-  let removeCardFromDeck = (index, ref, right) => {
+  let removeCardFromDeck = (index, right) => {
     let cardId = deck[index].id
-    setCurrentCard(0)
     setDeck(deck.filter(card => card.id !== cardId))
     if (right) {
       this.swiper.swipeRight();
@@ -37,13 +37,19 @@ export default function SwipeCards({ route }) {
     }
   }
 
-  const showAnswer = (show) =>{
+  const showAnswer = (show) => {
     setShowButtons(show)
   }
 
   return (
-    <Container style={styles.container}>
-      <Text style={styles.title}>{deckTitle}</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image source={Platform.OS === 'ios' ? backIos : backAndroid} resizeMode={'contain'} style={styles.icon} />
+        </TouchableOpacity>
+        <Text style={styles.title}>{deckTitle}</Text>
+      </View>
+
       <CardStack
         style={styles.main}
         ref={swiper => {
@@ -56,37 +62,44 @@ export default function SwipeCards({ route }) {
         horizontalSwipe={deck.length === 1 ? false : true}
         onSwiped={(index) => setCurrentCard(index + 1 === deck.length ? 0 : index + 1)}>
         {deck.map((card, index) => (
-          <View>
+          <View key={card.id}>
             <Card
-              key={card.id}
               style={styles.card}>
               <FlipCard
                 question={card.question}
                 answer={card.answer}
-                showAnswer= {showAnswer}/>
+                answerImage={card.answerImage}
+                questionImage={card.questionImage}
+                showAnswer={showAnswer} />
             </Card>
           </View>
         ))}
       </CardStack>
       <View style={styles.footer}>
-      {showButtons ?
-      
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => {
-            removeCardFromDeck(currentCard, swiperRef, false);
-          }}>
-            <Image source={Platform.OS === 'ios' ? wrongIos : wrongAndroid} resizeMode={'contain'} style={{ height: 62, width: 62 }} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            removeCardFromDeck(currentCard, swiperRef, true);
-          }}>
-            <Image source={Platform.OS === 'ios' ? checkIos : checkAndroid} resizeMode={'contain'} style={{ height: 62, width: 62 }} />
-          </TouchableOpacity>
+        {showButtons ?
+        <View style = {styles.answerView}>
+        <Text>Did you get it Right?</Text>
+          <View style={styles.buttonContainer}>
+            
+            <TouchableOpacity onPress={() => {
+              removeCardFromDeck(currentCard, false);
+            }}>
+              <Image source={Platform.OS === 'ios' ? wrongIos : wrongAndroid} resizeMode={'contain'} style={styles.icon} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              removeCardFromDeck(currentCard, true);
+            }}>
+              <Image source={Platform.OS === 'ios' ? checkIos : checkAndroid} resizeMode={'contain'} style={styles.icon} />
+            </TouchableOpacity>
+          </View>
+
+
         </View>
-      : null
-      }
-</View>
-    </Container>
+
+          : null
+        }
+      </View>
+    </View>
   );
 }
 
@@ -94,15 +107,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#e6e6e6',
+  },
+  header: {
+    flex: 1,
+    ...Platform.select({
+      ios:{
+        margin: 24,
+      },
+      android: {
+        margin: 16,
+      }
+    }), 
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  icon:{
+    ...Platform.select({
+      ios: {
+        height: 62,
+        width: 62,
+      },
+      android: {
+        height: 50,
+        width: 50,
+        margin: 8
+      }
+    }),
   },
   title: {
-    flex: 1,
-    justifyContent: 'center',
-    textAlign: 'center'
+    marginStart: 16,
+    alignItems: 'center',
+    textAlignVertical: "center",
+    justifyContent: 'flex-start',
+    textAlign: 'center',
+    fontSize: 20
   },
   main: {
-    flex: 5,
+    ...Platform.select({
+      ios:{
+        marginTop: 16,
+        flex: 5,
+      },
+      android: {
+        marginTop: 50,
+        flex: 4,
+      }
+    }),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -121,11 +172,29 @@ const styles = StyleSheet.create({
   footer: {
     flex: 2,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+  },
+  answerView:{
+    ...Platform.select({
+      ios: {
+        marginTop: 56
+      },
+      android: {
+        marginTop: 84
+      }
+    }),
+    flexDirection: 'column',
+    textAlign: 'center',
+    alignItems: 'center',
+    fontSize: 20
   },
   buttonContainer: {
-    marginTop: 20,
-    width: 220,
+    ...Platform.select({
+      ios: {
+        marginTop: 10
+      }
+    }),
+    width: 300,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Text } from 'native-base'
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import CardFlip from 'react-native-card-flip';
 import { Audio } from 'expo-av';
-import BackgroundImage from './BackgroundImage';
+import LoadedImage from './LoadedImage';
 
 export default function FlipCard(props) {
   const cardRef = useRef(props.id);
@@ -20,22 +21,23 @@ export default function FlipCard(props) {
       console.log(error)
     }
     ref.current.flip()
-    
+
     props.showAnswer(showButtons)
   }
 
   return (
     <View style={styles.container}>
-      <CardFlip style={styles.Cardcontainer} ref={cardRef} >
+      <CardFlip style={styles.cardcontainer} ref={cardRef} >
         <TouchableHighlight
           activeOpacity={0.4}
           underlayColor="#ff0000"
           style={styles.card}
           onLongPress={() => flipSound(cardRef, true)} >
           <View style={styles.cardContent}>
-            {props.question && <Text>{props.question}</Text>}
-            {props.questionImage && <BackgroundImage imageRef={props.questionImage} />}
-            <Text>Press to see Answer</Text>
+            <Text style={styles.question}>Question?</Text>
+            {props.question && <Text style={styles.text}>{props.question}</Text>}
+            {props.questionImage ? <LoadedImage imageRef={props.questionImage} type='cardImage' /> : <View style={styles.cardimage} />}
+              <Text style={styles.bottonText} note>Press to see Answer</Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -44,9 +46,11 @@ export default function FlipCard(props) {
           style={[styles.card, styles.flipCardBack]}
           onLongPress={() => flipSound(cardRef, false)}>
           <View style={styles.cardContent}>
-            {props.answer && <Text>{props.answer}</Text>}
-            {props.AnswerImage && <BackgroundImage imageRef={props.AnswerImage} />}
-            <Text>Press to return to Question</Text>
+            <Text style={styles.answer}>Answer</Text>
+            {props.answer && <Text style={styles.text}>{props.answer}</Text>}
+            {props.answerImage ? <LoadedImage imageRef={props.AnswerImage} type='cardImage' /> : <View style={styles.cardimage} />}
+
+              <Text style={styles.bottonText} note>Press to return to Question</Text>
           </View>
         </TouchableHighlight>
       </CardFlip>
@@ -57,38 +61,59 @@ export default function FlipCard(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  Cardcontainer: {
+  cardcontainer: {
     width: 320,
     height: 470,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   card: {
     width: 320,
     height: 470,
     backgroundColor: '#FE474C',
-    borderRadius: 5,
+    borderRadius: 4,
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {
-      width: 0,
-      height: 1,
+      width: 10,
+      height: 10,
     },
     shadowOpacity: 0.5,
   },
   flipCardBack: {
     backgroundColor: 'green'
   },
-  cardContent:{
-    alignItems: 'center',
-    justifyContent: 'center',
+  cardContent: {
     flex: 1,
-    margin:10,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: 10,
     backgroundColor: 'white',
     borderRadius: 3,
   },
+  answer: {
+    flex: 1,
+    fontSize: 24,
+    marginTop: 4,
+    color: 'green'
+  },
+  question: {
+    flex: 1,
+    fontSize: 24,
+    marginTop: 4,
+    color: '#FE474C',
+  },
+  text: {
+    flex: 2,
+    fontSize: 16,
+  },
+  cardimage: {
+    flex: 4
+  },
+  bottonText: {
+    flex: 1,
+    fontSize: 12,
+    marginTop: 20,
+  }
 });
 
 

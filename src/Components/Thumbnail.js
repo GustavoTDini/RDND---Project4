@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         padding: 4,
-        margin: 2,
+        margin: 3,
         borderRadius: 10
       },
       android: {

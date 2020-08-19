@@ -20,8 +20,9 @@ export async function getAndLoadHttpUrl(firebase, ref) {
   })
 }
 
-export function formatNewCard(question, answer, questionImage, answerImage) {
+export function formatNewCard(id, question, answer, questionImage, answerImage) {
   return {
+    id: id,
     question: question,
     answer: answer,
     questionImage: questionImage,
@@ -29,10 +30,11 @@ export function formatNewCard(question, answer, questionImage, answerImage) {
   }
 }
 
-export function formatNewDeck(id, author, title, description, topic, image) {
+export function formatNewDeck(id, author, title, description, topic, image, authorId) {
   return {
     id: id,
     author: author,
+    authorId: authorId,
     title: title,
     description: description,
     topic: topic,

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Image, View } from 'react-native'
+import { StyleSheet, Image, View, Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase'
 import 'firebase/storage'
 import { Container, Content, Form, Item, Input, Label, Text, ActionSheet, Button, Spinner } from 'native-base';
-import { formatNewCard, saveImageToStorage, getPermissionAsync,getImageFromCamera, getImageFromRoll } from '../Utilities/helperFunctions';
+import { formatNewCard, saveImageToStorage, getPermissionAsync, getImageFromCamera, getImageFromRoll } from '../Utilities/helperFunctions';
 import { useNavigation } from '@react-navigation/native'
 import { ANDROID_BUTTONS, IOS_BUTTONS, CANCEL_INDEX } from '../Utilities/Constants'
 
@@ -41,7 +41,7 @@ export default AddNewCard = ({ route }) => {
       const answerImageRef = firebase.storage().ref(answerImagePath)
       await saveImageToStorage(answerImageRef, answerImage)
     }
-    const newCard = formatNewCard(question, answer, questionImagePath, answerImagePath)
+    const newCard = formatNewCard(newCardKey, question, answer, questionImagePath, answerImagePath)
     firebase.update(`decks/${deckId}/cards`, { ...cards, [newCardKey]: newCard })
     setLoading(false)
     navigation.goBack();
@@ -61,11 +61,11 @@ export default AddNewCard = ({ route }) => {
       buttonIndex => {
         if (buttonIndex === 0) {
           getImageFromCamera().then((result) =>
-          type === 'question'? setQuestionImage(result): setAnswerImage(result))
+            type === 'question' ? setQuestionImage(result) : setAnswerImage(result))
         }
         if (buttonIndex === 1) {
           getImageFromRoll().then((result) =>
-          type === 'question'? setQuestionImage(result): setAnswerImage(result))
+            type === 'question' ? setQuestionImage(result) : setAnswerImage(result))
         }
       }
     )
@@ -84,11 +84,14 @@ export default AddNewCard = ({ route }) => {
               value={question}
             />
           </Item>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button onPress={() => openActionSheet('question')}>
+          <View style={styles.imageBlock}>
+            <Button
+              style={styles.button}
+              block
+              onPress={() => openActionSheet('question')}>
               <Text>Select an image for your question</Text>
             </Button>
-            {questionImage && <Image source={{ uri: questionImage }} style={{ width: 300, height: 200 }} />}
+            {questionImage && <Image source={{ uri: questionImage }} style={styles.imageSize} />}
           </View>
         </Form>
         <Form>
@@ -99,13 +102,19 @@ export default AddNewCard = ({ route }) => {
               value={answer}
             />
           </Item>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button onPress={() => openActionSheet('answer')}>
+          <View style={styles.imageBlock}>
+            <Button
+              style={styles.button}
+              block
+              onPress={() => openActionSheet('answer')}>
               <Text>Select an image for your answer</Text>
             </Button>
-            {answerImage && <Image source={{ uri: answerImage }} style={{ width: 300, height: 200 }} />}
+            {answerImage && <Image source={{ uri: answerImage }} style={styles.imageSize} />}
           </View>
           <Button
+            style={styles.button}
+            block
+            transparent={Platform.OS === 'ios' ? true : false}
             onPress={() => saveNewCard()}>
             <Text>Add this card to deck</Text>
           </Button>
@@ -115,4 +124,17 @@ export default AddNewCard = ({ route }) => {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  button: {
+    margin: 20
+  },
+  imageBlock: {
+    flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  imageSize:{
+    width: 300, 
+    height: 200
+  }
+})
