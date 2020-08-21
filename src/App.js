@@ -14,7 +14,6 @@ import SwipeCards from './Components/SwipeCards'
 import AddNewCard from './Components/AddNewCard'
 import AddNewDeck from './Components/AddNewDeck'
 import SplashScreen from './Components/SplashScreen';
-import { HeaderBackButton } from '@react-navigation/stack';
 import * as Font from 'expo-font';
 
 const Stack = createStackNavigator();
@@ -23,6 +22,7 @@ const ANDROID = Platform.OS === 'android'
 
 export default function App() {
   useFirebaseConnect('topics');
+  useFirebaseConnect('users');
   const firebase = useFirebase()
   const [splash, setSplash] = useState(true)
   const auth = useSelector(state => state.firebase.auth)
@@ -42,7 +42,6 @@ export default function App() {
     if (splash) return <SplashScreen />;
     return children
   }
-
 
   return (
     <Container>

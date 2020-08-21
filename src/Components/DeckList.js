@@ -5,13 +5,16 @@ import { StyleSheet, View, FlatList } from 'react-native'
 import { Container, Fab, Footer, FooterTab, Button, Icon, Header, Left } from 'native-base';
 import DeckListItem from './DeckListItem';
 import { createList } from '../Utilities/helperFunctions'
+import { useNavigation } from '@react-navigation/native';
 
 
-export default function DeckList({ navigation }) {
+export default function DeckList() {
+  const navigation = useNavigation()
   const firebase = useFirebase()
   useFirebaseConnect('topics');
   useFirebaseConnect(`decks`)
   const decks = useSelector(state => createList(state.firebase.data.decks))
+  console.log('DECKS' + JSON.stringify(decks))
 
   const navigateToNewDeck = () => {
     navigation.navigate('AddNewDeck')

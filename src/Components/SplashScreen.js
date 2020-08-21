@@ -18,7 +18,10 @@ export default function SplashScreen() {
   return (
     <Container>
       <Content>
-        <Animated.Image source = {splashIcon} style = {{opacity}} resizeMode='center'/>
+        <Animated.Image 
+          source = {splashIcon} 
+          style = {{opacity}} 
+          resizeMode='center'/>
       </Content>
     </Container>
   )

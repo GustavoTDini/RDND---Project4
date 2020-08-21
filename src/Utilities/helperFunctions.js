@@ -5,9 +5,19 @@ import * as Permissions from 'expo-permissions';
 export function createList(JsonDeckList) {
   let list = []
   for (let item in JsonDeckList) {
-    list = list.concat(JsonDeckList[item])
+    if (JsonDeckList[item] !== null){
+      list = list.concat(JsonDeckList[item])
+    }
   }
   return list
+}
+
+export function createTrueFalseArray(length) {
+  let array = []
+  for (let i = 0; i < length; i++) {
+    array.push(false)
+  }
+  return array
 }
 
 export async function getAndLoadHttpUrl(firebase, ref) {
@@ -27,6 +37,14 @@ export function formatNewCard(id, question, answer, questionImage, answerImage) 
     answer: answer,
     questionImage: questionImage,
     answerImage: answerImage
+  }
+}
+
+export function formatNewUser(name, email) {
+  return {
+    name: name,
+    email: email,
+    decks:{}
   }
 }
 

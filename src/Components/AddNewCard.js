@@ -75,7 +75,7 @@ export default AddNewCard = ({ route }) => {
   return (
     <Container>
       <Content>
-        {loading && <Spinner />}
+        {loading && <Spinner color='blue'/>}
         <Form>
           <Item floatingLabel>
             <Label>Question</Label>

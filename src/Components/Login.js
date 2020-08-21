@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { StyleSheet, View } from 'react-native'
 import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
 import { Container, Form, Item, Input, Label, Text, Button, Content, Toast, H1, H3 } from 'native-base'
+import { formatNewUser } from '../Utilities/helperFunctions';
 
 export default function Login() {
   const firebase = useFirebase()
@@ -11,17 +12,20 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [login, setLoginCreate] = useState(true)
+  const auth = useSelector(state => state.firebase.auth)
 
   function loginWithEmail() {
     firebase.login({
       email: email,
       password: password
     }
-    ).catch(
+    ).then(
+      console.log("AUTH: " + JSON.stringify(auth))
+    )
+    .catch(
       (error) => {
         Toast.show({
           text: error.message,
-          buttonText: "Okay",
           duration: 3000
         })
       }
@@ -30,21 +34,21 @@ export default function Login() {
 
 
   //TODO Add a User to a auth Profile
-  function createNewUserEmail({ email, password, username }) {
+  function createNewUserEmail() {
     firebase.createUser(
-      { email, password }
-    ).then(
+      { email, password },
+      formatNewUser(userName, email))
+    .then(
       setLoginCreate(true)
-    ).catch(
+    )
+    .catch(
       (error) => {
         Toast.show({
           text: error.message,
-          buttonText: "Okay",
           duration: 3000
         })
       }
     )
-
   }
 
   return (

@@ -14,20 +14,19 @@ export default AddNewDeck = () => {
   useFirebaseConnect(`topics`)
   const topics = useSelector(state => createList(state.firebase.data.topics))
   const auth = useSelector(state => state.firebase.auth)
-  console.log('Auth: ' + JSON.stringify(auth))
+  const userId = auth.uid
+  const loggedAuthor = useSelector(state => state.firebase.profile.name)
 
   useEffect(() => {
     getPermissionAsync();
   }, [])
 
-  const [author, setAuthor] = useState('')
+  const [author, setAuthor] = useState(loggedAuthor)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState(null)
   const [topic, setTopic] = useState('')
-  const [image, setImage] = useState(false)
+  const [image, setImage] = useState(null)
   const [loading, setLoading] = useState(false)
-
-  //TODO : Add author from auth
 
   saveNewDeck = async () => {
     setLoading(true)
@@ -38,7 +37,7 @@ export default AddNewDeck = () => {
       const imageRef = firebase.storage().ref(imagePath)
       await saveImageToStorage(imageRef, image)
     }
-    const newDeck = formatNewDeck(newDeckKey, author, title, description, topic, imagePath, authorId)
+    const newDeck = formatNewDeck(newDeckKey, author, title, description, topic, imagePath, userId)
     firebase.update('decks', { [newDeckKey]: newDeck })
     setLoading(false)
     navigation.goBack();
@@ -72,7 +71,7 @@ export default AddNewDeck = () => {
   return (
     <Container>
       <Content>
-        {loading && <Spinner />}
+        {loading && <Spinner color='blue'/>}
         <Form>
           <Item floatingLabel>
             <Label>Title</Label>

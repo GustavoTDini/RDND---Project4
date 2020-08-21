@@ -2,25 +2,26 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect } from 'react-redux-firebase'
 import { StyleSheet, Platform, Image, View, Text } from 'react-native'
-import { createList } from '../Utilities/helperFunctions'
+import { createList, createTrueFalseArray } from '../Utilities/helperFunctions'
 import FlipCard from './FlipCard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import { checkIos, wrongIos, checkAndroid, wrongAndroid, backAndroid, backIos } from '../Assets'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-export default function SwipeCards({ route }) {
+export default function SwipeCards() {
   const navigation = useNavigation()
-  const swiperRef = useRef(null)
+  const route = useRoute()
   const { deckId, deckTitle } = route.params;
   const [currentCard, setCurrentCard] = useState(0)
   const [rightCounts, setRightCounts] = useState(0)
-  const [showButtons, setShowButtons] = useState(true)
-
 
   useFirebaseConnect(`decks/${deckId}`)
   let cards = useSelector(state => createList(state.firebase.data.decks[deckId].cards))
   const cardsTotal = cards.length
+
+  const [showButtons, setShowButtons] = useState(createTrueFalseArray(cardsTotal))
+  console.log(showButtons)
 
   useEffect(() => {
   }, [deck])
@@ -37,25 +38,29 @@ export default function SwipeCards({ route }) {
     }
   }
 
-  const showAnswer = (show) => {
-    setShowButtons(show)
+  const showAnswer = (show, index) => {
+    showButtons[index] = show
+    setShowButtons(showButtons)
+    console.log(showButtons)
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={Platform.OS === 'ios' ? backIos : backAndroid} resizeMode={'contain'} style={styles.icon} />
+          <Image
+            source={Platform.OS === 'ios' ? backIos : backAndroid}
+            resizeMode={'contain'}
+            style={Platform.OS === 'ios' ? styles.backIconIOS : styles.icon} />
         </TouchableOpacity>
         <Text style={styles.title}>{deckTitle}</Text>
       </View>
-
       <CardStack
         style={styles.main}
         ref={swiper => {
           this.swiper = swiper
         }}
-        renderNoMoreCards={() => deck.length === 0 ? <Text style={{ fontWeight: '700', fontSize: 18, color: 'gray' }}>No more cards :(</Text> : null}
+        renderNoMoreCards={() => deck.length === 0 ? <Text style={styles.noMoreCardText}>No more cards :(</Text> : null}
         loop={true}
         secondCardZoom={deck.length === 1 ? 0 : 0.95}
         verticalSwipe={deck.length === 1 ? false : true}
@@ -66,6 +71,7 @@ export default function SwipeCards({ route }) {
             <Card
               style={styles.card}>
               <FlipCard
+                index = {index}
                 question={card.question}
                 answer={card.answer}
                 answerImage={card.answerImage}
@@ -76,26 +82,30 @@ export default function SwipeCards({ route }) {
         ))}
       </CardStack>
       <View style={styles.footer}>
-        {showButtons ?
-        <View style = {styles.answerView}>
-        <Text>Did you get it Right?</Text>
-          <View style={styles.buttonContainer}>
-            
-            <TouchableOpacity onPress={() => {
-              removeCardFromDeck(currentCard, false);
-            }}>
-              <Image source={Platform.OS === 'ios' ? wrongIos : wrongAndroid} resizeMode={'contain'} style={styles.icon} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-              removeCardFromDeck(currentCard, true);
-            }}>
-              <Image source={Platform.OS === 'ios' ? checkIos : checkAndroid} resizeMode={'contain'} style={styles.icon} />
-            </TouchableOpacity>
+        {showButtons[currentCard] ?
+          <View style={styles.answerView}>
+            <Text>Did you get it Right?</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  removeCardFromDeck(currentCard, false);
+                }}>
+                <Image
+                  source={Platform.OS === 'ios' ? wrongIos : wrongAndroid}
+                  resizeMode={'contain'}
+                  style={styles.icon} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  removeCardFromDeck(currentCard, true);
+                }}>
+                <Image
+                  source={Platform.OS === 'ios' ? checkIos : checkAndroid}
+                  resizeMode={'contain'}
+                  style={styles.icon} />
+              </TouchableOpacity>
+            </View>
           </View>
-
-
-        </View>
-
           : null
         }
       </View>
@@ -112,21 +122,27 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     ...Platform.select({
-      ios:{
+      ios: {
         margin: 24,
       },
       android: {
         margin: 16,
       }
-    }), 
+    }),
     flexDirection: 'row',
     alignItems: 'center'
   },
-  icon:{
+  backIconIOS:{
+    height: 50,
+    width: 50,
+    margin: 10,
+    marginStart: 0
+  },  
+  icon: {
     ...Platform.select({
       ios: {
-        height: 62,
-        width: 62,
+        height: 60,
+        width: 60,
       },
       android: {
         height: 50,
@@ -145,7 +161,7 @@ const styles = StyleSheet.create({
   },
   main: {
     ...Platform.select({
-      ios:{
+      ios: {
         marginTop: 16,
         flex: 5,
       },
@@ -174,7 +190,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  answerView:{
+  answerView: {
     ...Platform.select({
       ios: {
         marginTop: 56
@@ -198,4 +214,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  noMoreCardText:{ 
+    fontWeight: '700', 
+    fontSize: 18, 
+    color: 'gray' 
+  }
 });

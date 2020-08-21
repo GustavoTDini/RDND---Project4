@@ -8,10 +8,8 @@ import LoadedImage from './LoadedImage';
 
 export default function FlipCard(props) {
   const cardRef = useRef(props.id);
-  const [showButtons, setShowButtons] = useState(false)
 
   flipSound = async (ref, show) => {
-    setShowButtons(show)
     try {
       const { sound: soundObject, status } = await Audio.Sound.createAsync(
         require('../Assets/Sounds/Card-flip-sound-effect.mp3'),
@@ -22,7 +20,7 @@ export default function FlipCard(props) {
     }
     ref.current.flip()
 
-    props.showAnswer(showButtons)
+    props.showAnswer(show, props.index)
   }
 
   return (
