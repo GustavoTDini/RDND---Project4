@@ -5,19 +5,39 @@ import * as Permissions from 'expo-permissions';
 export function createList(JsonDeckList) {
   let list = []
   for (let item in JsonDeckList) {
-    if (JsonDeckList[item] !== null){
+    if (JsonDeckList[item] !== null) {
       list = list.concat(JsonDeckList[item])
     }
   }
   return list
 }
 
-export function createTrueFalseArray(length) {
-  let array = []
-  for (let i = 0; i < length; i++) {
-    array.push(false)
+export function createTrueFalseJson(deck) {
+  console.log('DECK ' + JSON.stringify(deck))
+  let newJson = {}
+  for (let i = 0; i < deck.length; i++) {
+    newJson[deck[i].id] = false
   }
-  return array
+  console.log(JSON.stringify(newJson))
+  return newJson
+}
+
+export function displayScoreMessage(score) {
+  let message = ''
+  if (score >= 100){
+    message = 'Congratulations, you answered all correct!!'
+  } else if (score >= 80 && score < 100) {
+    message = 'Great, you sure have studied for this topic!'
+  } else if (score >= 50 && score < 80) {
+    message = 'Good, but you need to study a litte more!'
+  } else if (score >= 30 && score < 50) {
+    message = 'Not Good enought, try harder next time!'
+  } else if (score > 0 && score < 30) {
+    message = 'You´d better spend less time on social media!'
+  } else {
+    message = 'Not even a single one correct! You´d better start your studies!'
+  }
+  return message  
 }
 
 export async function getAndLoadHttpUrl(firebase, ref) {
@@ -44,7 +64,7 @@ export function formatNewUser(name, email) {
   return {
     name: name,
     email: email,
-    decks:{}
+    decks: {}
   }
 }
 
@@ -59,7 +79,7 @@ export function formatNewDeck(id, author, title, description, topic, image, auth
     show_image: image,
     views_number: 0,
     date_created: Date.now(),
-    cards:{}
+    cards: {}
   }
 }
 
@@ -124,10 +144,14 @@ export async function getImageFromCamera() {
 }
 
 export async function getPermissionAsync() {
-  if (Constants.platform.ios) {
-    const { colectionStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (colectionStatus !== 'granted') {
-      alert('Sorry, we need cameraroll permissions to make this work!');
+  // Camera roll Permission 
+  if (Platform.OS === 'ios') {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
     }
   }
+  // Camera Permission
+  const { status } = await Permissions.askAsync(Permissions.CAMERA);
+  return status
 };

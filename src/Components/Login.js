@@ -12,16 +12,12 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [login, setLoginCreate] = useState(true)
-  const auth = useSelector(state => state.firebase.auth)
 
   function loginWithEmail() {
     firebase.login({
       email: email,
       password: password
-    }
-    ).then(
-      console.log("AUTH: " + JSON.stringify(auth))
-    )
+    })
     .catch(
       (error) => {
         Toast.show({
@@ -32,8 +28,6 @@ export default function Login() {
     )
   }
 
-
-  //TODO Add a User to a auth Profile
   function createNewUserEmail() {
     firebase.createUser(
       { email, password },

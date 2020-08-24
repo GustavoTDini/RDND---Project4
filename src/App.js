@@ -14,6 +14,7 @@ import SwipeCards from './Components/SwipeCards'
 import AddNewCard from './Components/AddNewCard'
 import AddNewDeck from './Components/AddNewDeck'
 import SplashScreen from './Components/SplashScreen';
+import Score from './Components/Score'
 import * as Font from 'expo-font';
 
 const Stack = createStackNavigator();
@@ -64,8 +65,8 @@ export default function App() {
                     headerLeft: (props) => (
                       <Icon
                         {...props}
-                        name = 'exit'
-                        style ={{marginLeft: 20, color:'#fff'}}
+                        name='exit'
+                        style={{ marginLeft: 20, color: '#fff' }}
                         onPress={() => {
                           firebase.logout()
                         }}
@@ -87,6 +88,12 @@ export default function App() {
                 <Stack.Screen
                   name="AddNewDeck"
                   component={AddNewDeck} />
+                <Stack.Screen
+                  name="Score"
+                  component={Score}
+                  options={{
+                    headerShown: false,
+                  }} />
               </> :
               <>
                 <Stack.Screen

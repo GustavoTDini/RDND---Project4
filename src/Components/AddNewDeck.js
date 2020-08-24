@@ -16,9 +16,10 @@ export default AddNewDeck = () => {
   const auth = useSelector(state => state.firebase.auth)
   const userId = auth.uid
   const loggedAuthor = useSelector(state => state.firebase.profile.name)
+  const [hasPermission, setHasPermission] = useState(null)
 
   useEffect(() => {
-    getPermissionAsync();
+    setHasPermission(getPermissionAsync());
   }, [])
 
   const [author, setAuthor] = useState(loggedAuthor)
@@ -68,68 +69,75 @@ export default AddNewDeck = () => {
     )
   }
 
-  return (
-    <Container>
-      <Content>
-        {loading && <Spinner color='blue'/>}
-        <Form>
-          <Item floatingLabel>
-            <Label>Title</Label>
-            <Input
-              onChangeText={text => setTitle(text)}
-              value={title}
-            />
-          </Item>
-          <Item floatingLabel>
-            <Label>Description</Label>
-            <Input
-              onChangeText={text => setDescription(text)}
-              value={description}
-            />
-          </Item>
-          <Item floatingLabel>
-            <Label>Author</Label>
-            <Input
-              onChangeText={text => setAuthor(text)}
-              value={author}
-            />
-          </Item>
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" />}
-            placeholder="Select your deck topic"
-            placeholderStyle={{ color: "#bfc6ea" }}
-            placeholderIconColor="#007aff"
-            selectedValue={topic}
-            onValueChange={setTopic}
-            style={styles.picker}
-          >
-            {topics.map((topic) => (
-              <Picker.Item key={topic.id} label={topic.name} value={topic.id} />
-            ))}
-          </Picker>
-          <View style={styles.imageBlock}>
+  if (hasPermission === null) {
+    return <View />;
+  } else if (hasPermission === false) {
+    return (
+      <Content contentContainerStyle={styles.noPermissionMessage}>
+        <Text>No access to camera!!</Text>
+      </Content>)
+  } else {
+    return (
+      <Container>
+        <Content>
+          {loading && <Spinner color='blue' />}
+          <Form>
+            <Item floatingLabel>
+              <Label>Title</Label>
+              <Input
+                onChangeText={text => setTitle(text)}
+                value={title}
+              />
+            </Item>
+            <Item floatingLabel>
+              <Label>Description</Label>
+              <Input
+                onChangeText={text => setDescription(text)}
+                value={description}
+              />
+            </Item>
+            <Item floatingLabel>
+              <Label>Author</Label>
+              <Input
+                onChangeText={text => setAuthor(text)}
+                value={author}
+              />
+            </Item>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              placeholder="Select your deck topic"
+              placeholderIconColor="#007aff"
+              selectedValue={topic}
+              onValueChange={setTopic}
+              style={styles.picker}
+            >
+              {topics.map((topic) => (
+                <Picker.Item key={topic.id} label={topic.name} value={topic.id} />
+              ))}
+            </Picker>
+            <View style={styles.imageBlock}>
+              <Button
+                block
+                style={styles.button}
+                onPress={() => openActionSheet()}>
+                <Text>Select an image for your deck</Text>
+              </Button>
+              {image && <Image source={{ uri: image }} style={styles.imageSize} />}
+            </View>
             <Button
-              block
               style={styles.button}
-              onPress={() => openActionSheet()}>
-              <Text>Select an image for your deck</Text>
+              block
+              transparent={Platform.OS === 'ios' ? true : false}
+              onPress={() => saveNewDeck()}>
+              <Text>Create new Deck</Text>
             </Button>
-            {image && <Image source={{ uri: image }} style={styles.imageSize} />}
-          </View>
-          <Button
-            style={styles.button}
-            block
-            transparent={Platform.OS === 'ios' ? true : false}
-            onPress={() => saveNewDeck()}>
-            <Text>Create new Deck</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  )
+          </Form>
+        </Content>
+      </Container>
+    )
+  }
 }
-
 const styles = StyleSheet.create({
   button: {
     margin: 20
@@ -138,12 +146,21 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   imageBlock: {
-    flex: 1, 
-    alignItems: 'center', 
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center'
   },
-  imageSize:{
-    width: 300, 
+  imageSize: {
+    width: 300,
     height: 200
+  },
+  noPermissionMessage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  messageText: {
+    fontSize: 20,
+    fontWeight: '200'
   }
 })

@@ -14,7 +14,6 @@ export default function DeckList() {
   useFirebaseConnect('topics');
   useFirebaseConnect(`decks`)
   const decks = useSelector(state => createList(state.firebase.data.decks))
-  console.log('DECKS' + JSON.stringify(decks))
 
   const navigateToNewDeck = () => {
     navigation.navigate('AddNewDeck')

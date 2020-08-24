@@ -1,28 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
 import { ActionSheet } from "native-base";
 
 
 export default ChooseImagePicker = (props) => {
   const [image, setimage] = useState(null)
-
-  useEffect(() => {
-    getPermissionAsync();
-  }, [])
-  
-  // TODO - Correct Permissions
-
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { colectionStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (colectionStatus !== 'granted') {
-        alert('Sorry, we need cameraroll permissions to make this work!');
-      }
-    }
-  };
 
   getImageFromRoll = async () => {
     try {

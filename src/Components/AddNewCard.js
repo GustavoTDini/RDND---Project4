@@ -14,9 +14,10 @@ export default AddNewCard = ({ route }) => {
   const firebase = useFirebase()
   useFirebaseConnect(`decks/${deckId}`)
   const cards = useSelector(state => state.firebase.data.decks[deckId].cards)
+  const [hasPermission, setHasPermission] = useState(null)
 
   useEffect(() => {
-    getPermissionAsync();
+    setHasPermission(getPermissionAsync());
   }, [])
 
   const [question, setQuestion] = useState('')
@@ -71,57 +72,65 @@ export default AddNewCard = ({ route }) => {
     )
   }
 
-
-  return (
-    <Container>
-      <Content>
-        {loading && <Spinner color='blue'/>}
-        <Form>
-          <Item floatingLabel>
-            <Label>Question</Label>
-            <Input
-              onChangeText={text => setQuestion(text)}
-              value={question}
-            />
-          </Item>
-          <View style={styles.imageBlock}>
+  if (hasPermission === null) {
+    return <View />;
+  } else if (hasPermission === false) {
+    return (
+      <Content contentContainerStyle={styles.noPermissionMessage}>
+        <Text>No access to camera!!</Text>
+      </Content>)
+  } else {
+    return (
+      <Container>
+        <Content>
+          {loading && <Spinner color='blue' />}
+          <Form>
+            <Item floatingLabel>
+              <Label>Question</Label>
+              <Input
+                onChangeText={text => setQuestion(text)}
+                value={question}
+              />
+            </Item>
+            <View style={styles.imageBlock}>
+              <Button
+                style={styles.button}
+                block
+                onPress={() => openActionSheet('question')}>
+                <Text>Select an image for your question</Text>
+              </Button>
+              {questionImage && <Image source={{ uri: questionImage }} style={styles.imageSize} />}
+            </View>
+          </Form>
+          <Form>
+            <Item floatingLabel last>
+              <Label>Answer</Label>
+              <Input
+                onChangeText={text => setAnswer(text)}
+                value={answer}
+              />
+            </Item>
+            <View style={styles.imageBlock}>
+              <Button
+                style={styles.button}
+                block
+                onPress={() => openActionSheet('answer')}>
+                <Text>Select an image for your answer</Text>
+              </Button>
+              {answerImage && <Image source={{ uri: answerImage }} style={styles.imageSize} />}
+            </View>
             <Button
               style={styles.button}
               block
-              onPress={() => openActionSheet('question')}>
-              <Text>Select an image for your question</Text>
+              transparent={Platform.OS === 'ios' ? true : false}
+              onPress={() => saveNewCard()}>
+              <Text>Add this card to deck</Text>
             </Button>
-            {questionImage && <Image source={{ uri: questionImage }} style={styles.imageSize} />}
-          </View>
-        </Form>
-        <Form>
-          <Item floatingLabel last>
-            <Label>Answer</Label>
-            <Input
-              onChangeText={text => setAnswer(text)}
-              value={answer}
-            />
-          </Item>
-          <View style={styles.imageBlock}>
-            <Button
-              style={styles.button}
-              block
-              onPress={() => openActionSheet('answer')}>
-              <Text>Select an image for your answer</Text>
-            </Button>
-            {answerImage && <Image source={{ uri: answerImage }} style={styles.imageSize} />}
-          </View>
-          <Button
-            style={styles.button}
-            block
-            transparent={Platform.OS === 'ios' ? true : false}
-            onPress={() => saveNewCard()}>
-            <Text>Add this card to deck</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  )
+          </Form>
+        </Content>
+      </Container>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -129,12 +138,21 @@ const styles = StyleSheet.create({
     margin: 20
   },
   imageBlock: {
-    flex: 1, 
-    alignItems: 'center', 
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center'
   },
-  imageSize:{
-    width: 300, 
+  imageSize: {
+    width: 300,
     height: 200
+  },
+  noPermissionMessage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  messageText: {
+    fontSize: 20,
+    fontWeight: '200'
   }
 })

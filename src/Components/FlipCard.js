@@ -1,26 +1,31 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'native-base'
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import CardFlip from 'react-native-card-flip';
 import { Audio } from 'expo-av';
-import LoadedImage from './LoadedImage';
+import LoadedImage from './LoadedImage'
 
 export default function FlipCard(props) {
-  const cardRef = useRef(props.id);
+  const cardRef = useRef(props.cardId);
+  const [front, setFrontBack] = useState(true)
+
+  useEffect(() => {
+    props.showAnswer(!front)
+  }, [front])
+
 
   flipSound = async (ref, show) => {
     try {
       const { sound: soundObject, status } = await Audio.Sound.createAsync(
-        require('../Assets/Sounds/Card-flip-sound-effect.mp3'),
+        require('../Assets/Sounds/Card-flip.mp3'),
         { shouldPlay: true }
       );
     } catch (error) {
       console.log(error)
     }
     ref.current.flip()
-
-    props.showAnswer(show, props.index)
+    setFrontBack(!show)
   }
 
   return (
@@ -35,7 +40,7 @@ export default function FlipCard(props) {
             <Text style={styles.question}>Question?</Text>
             {props.question && <Text style={styles.text}>{props.question}</Text>}
             {props.questionImage ? <LoadedImage imageRef={props.questionImage} type='cardImage' /> : <View style={styles.cardimage} />}
-              <Text style={styles.bottonText} note>Press to see Answer</Text>
+            <Text style={styles.bottonText} note>Press to see Answer</Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -47,8 +52,7 @@ export default function FlipCard(props) {
             <Text style={styles.answer}>Answer</Text>
             {props.answer && <Text style={styles.text}>{props.answer}</Text>}
             {props.answerImage ? <LoadedImage imageRef={props.AnswerImage} type='cardImage' /> : <View style={styles.cardimage} />}
-
-              <Text style={styles.bottonText} note>Press to return to Question</Text>
+            <Text style={styles.bottonText} note>Press to return to Question</Text>
           </View>
         </TouchableHighlight>
       </CardFlip>

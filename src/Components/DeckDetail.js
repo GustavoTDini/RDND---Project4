@@ -26,7 +26,6 @@ export default function DeckDetail() {
 
   navigateToCards = () => {
     const addedViewsNumber = deck.views_number + 1
-    console.log('NEWVIEWS ' + JSON.stringify(addedViewsNumber))
     firebase.update(`decks/${deckId}`, {views_number:addedViewsNumber})
     navigation.navigate('SwipeCards', {
       deckId: deckId,

@@ -6,6 +6,3 @@ export const checkAndroid = require('./Icons/check-android.png');
 export const wrongAndroid = require('./Icons/wrong-android.png');
 export const backAndroid = require('./Icons/android-back-arrow.png');
 export const backIos = require('./Icons/ios-back-arrow.png');
-
-
-export const flipSound = require('./Sounds/Card-flip-sound-effect.mp3');

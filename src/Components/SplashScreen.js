@@ -17,7 +17,7 @@ export default function SplashScreen() {
 
   return (
     <Container>
-      <Content>
+      <Content contentContainerStyle={styles.content}>
         <Animated.Image 
           source = {splashIcon} 
           style = {{opacity}} 
@@ -28,10 +28,9 @@ export default function SplashScreen() {
 }
 
 const styles = StyleSheet.create({
-  content:{
+  content: {
     flex: 1,
-    marginTop: 'auto',
-    alignContent:'center',
-    justifyContent:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
