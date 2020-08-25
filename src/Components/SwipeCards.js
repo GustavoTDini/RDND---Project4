@@ -2,17 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect } from 'react-redux-firebase'
 import { StyleSheet, Platform, Image, View, Text, Dimensions } from 'react-native'
-import { createList } from '../Utilities/helperFunctions'
-import FlipCard from './FlipCard';
+import { createList, createTrueFalseArray } from '../Utilities/helperFunctions'
+import FlipFlashCard from './FlipFlashCard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { checkIos, wrongIos, checkAndroid, wrongAndroid, backAndroid, backIos } from '../Assets'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel'
-import Swiper from 'react-native-deck-swiper'
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
-const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 3 / 4);
+const ITEM_WIDTH = Math.round(SLIDER_WIDTH);
+const TOTAL_HEIGHT = Dimensions.get('window').height;
+const ITEM_HEIGHT = Math.round(TOTAL_HEIGHT * 4 / 5);
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 export default function SwipeCards() {
   const navigation = useNavigation()
@@ -49,49 +50,45 @@ export default function SwipeCards() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const [deck, setDeck] = useState(cards)
   const [rightCounts, setRightCounts] = useState(0)
-  const [showButtons, setShowButtons] = useState(false)
+  const [showButtons, setShowButtons] = useState(createTrueFalseArray(deck))
 
-  function showAnswer(show) {
-    setShowButtons(show)
+  function updateShowButtons(show) {
+    let newArray = [...showButtons];
+    newArray[currentCardIndex] = show
+    setShowButtons(newArray)
   }
 
   let removeCardFromDeck = (right) => {
     const cardToRemove = deck[currentCardIndex].id
     setDeck(deck.filter(card => card.id !== cardToRemove))
-    console.log('Current Card: ' + cardToRemove)
+    setShowButtons(createTrueFalseArray(deck))
     if (right) {
       setRightCounts(rightCounts + 1)
     }
-    this.swiper.snapToItem (0, animated = true, fireCallback = true);
-
+    //this.swiper.snapToItem(0, animated = true, fireCallback = true);
+    //setCurrentCardIndex(0)
   }
-
-
-  const RenderCard = (card) => {
+  const RenderCard = ({ item, index }) => {
     return (
       <View style={styles.card}>
-        <FlipCard
-          cardId={card.id}
-          question={card.question}
-          answer={card.answer}
-          answerImage={card.answerImage}
-          questionImage={card.questionImage}
-          showAnswer={showAnswer} />
+        <FlipFlashCard
+          flip={showButtons[index]}
+          question={item.question}
+          answer={item.answer}
+          answerImage={item.answerImage}
+          questionImage={item.questionImage}
+          updateShowButtons={updateShowButtons} />
       </View>
     );
   }
 
-  function updateIndex(previousIndex) {
-    setCurrentCardIndex(previousIndex + 1 === deck.length ? 0 : previousIndex + 1)
-  }
-
-
-
-
   if (deck.length === 0) {
+    setDeck(cards)
+    setRightCounts(0)
+    setCurrentCardIndex(0)
     navigation.navigate('Score', {
-      totalCards: cardsTotal,
-      rights: rightCounts,
+      cardsTotal: cardsTotal,
+      rightCounts: rightCounts,
       deckId: deckId,
       deckTitle: deckTitle
     })
@@ -107,61 +104,30 @@ export default function SwipeCards() {
             resizeMode={'contain'}
             style={Platform.OS === 'ios' ? styles.backIconIOS : styles.icon} />
         </TouchableOpacity>
-        <View style={{flexDirection:'column'}}>
+        <View style={{ flexDirection: 'column' }}>
           <Text style={styles.title}>{deckTitle}</Text>
           <Text style={styles.title} note>{deck.length} Questions Left</Text>
         </View>
 
       </View>
       <View style={styles.main}>
-      <Carousel
+        <Carousel
           ref={swiper => {
             this.swiper = swiper
           }}
           data={deck}
+          containerCustomStyle={{ flex: 1 }}
+          slideStyle={{ flex: 1 }}
           renderItem={RenderCard}
-          sliderWidth={SLIDER_WIDTH}
-          itemWidth={ITEM_WIDTH}
+          sliderWidth={viewportWidth}
+          itemWidth={viewportWidth}
+          slideStyle={{ width: viewportWidth }}
           layout='tinder'
-          onSnapToItem={(index) => setCurrentCardIndex(index)}
+          onScrollIndexChanged={(index) => setCurrentCardIndex(index)}
         />
-
-        {/* <Swiper
-          ref={swiper => {
-            this.swiper = swiper
-          }}
-          useViewOverflow={Platform.OS === 'ios'}
-          cards={deck}
-          renderCard={RenderCard}
-          backgroundColor={'#e6e6e6'}
-          cardVerticalMargin={-40}
-          cardHorizontalMargin={20}
-          infinite={true}
-          showSecondCard={true}
-          onSwiped={(index) => updateIndex(index)}
-          stackSize={deck.length > 3 ? 2 : deck.length === 1 ? 0 : 1}
-          verticalSwipe={deck.length === 1 ? false : true}
-          horizontalSwipe={deck.length === 1 ? false : true}
-        /> */}
       </View>
-
-
-
-
-      {/* <CardStack
-        style={styles.main}
-        ref={swiper => { this.swiper = swiper }}
-        renderNoMoreCards={() => deck.length === 0 ? <Text style={styles.noMoreCardText}>No more cards :(</Text> : null}
-        loop={true}
-        secondCardZoom={deck.length === 1 ? 0 : 0.95}
-        verticalSwipe={deck.length === 1 ? false : true}
-        horizontalSwipe={deck.length === 1 ? false : true}>
-        {deck.map((card) => (
-
-        ))}
-      </CardStack> */}
       <View style={styles.footer}>
-        {showButtons &&
+        {showButtons[currentCardIndex] &&
           <View style={styles.answerView}>
             <Text>Did you get it Right?</Text>
             <View style={styles.buttonContainer}>
@@ -197,6 +163,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#e6e6e6',
   },
   header: {
+    position: 'relative',
+    zIndex: -1,
     flex: 1,
     ...Platform.select({
       ios: {
@@ -236,46 +204,34 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20
   },
+  noMoreCardText: {
+    fontWeight: '700',
+    fontSize: 18,
+    color: 'gray'
+  },
   main: {
-    ...Platform.select({
-      ios: {
-        marginTop: 16,
-        flex: 5,
-      },
-      android: {
-        marginTop: 50,
-        flex: 4,
-      }
-    }),
+    flex: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   card: {
-    width: 320,
-    height: 470,
-    backgroundColor: '#FE474C',
-    borderRadius: 5,
-    shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.5,
+    flex: 1,
+    padding: 50,
+    marginTop: -50,
+    width: SLIDER_WIDTH,
+    height: TOTAL_HEIGHT,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   footer: {
+    position: 'relative',
+    zIndex: -1,
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   answerView: {
-    ...Platform.select({
-      ios: {
-        marginTop: 56
-      },
-      android: {
-        marginTop: 84
-      }
-    }),
+
     flexDirection: 'column',
     textAlign: 'center',
     alignItems: 'center',
@@ -291,9 +247,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  noMoreCardText: {
-    fontWeight: '700',
-    fontSize: 18,
-    color: 'gray'
-  }
+
 });

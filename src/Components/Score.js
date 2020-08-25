@@ -3,13 +3,12 @@ import { StyleSheet, View } from 'react-native'
 import { Container, Content, Text, Button } from 'native-base'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { displayScoreMessage } from '../Utilities/helperFunctions'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-export default Score = (props) => {
+export default Score = () => {
   const navigation = useNavigation()
-  //const {totalCards, rights, deckId } = props
-  const totalCards = 15
-  const rights = 10
+  const route = useRoute()
+  const {cardsTotal, rightCounts, deckId, deckTitle } = route.params;
 
   const navigateToDeckList = () => {
     navigation.navigate('DeckList')
@@ -18,7 +17,8 @@ export default Score = (props) => {
   const tryAgain = () => (
     navigation.navigate('SwipeCards', {
       deckId: deckId,
-      deckTitle: deck.title
+      deckTitle: deckTitle,
+      restart: true
     })
   )
 
@@ -31,7 +31,7 @@ export default Score = (props) => {
         <AnimatedCircularProgress
           size={280}
           width={30}
-          fill={(rights / totalCards) * 100}
+          fill={(rightCounts / cardsTotal) * 100}
           tintColor="green"
           onAnimationComplete={() => console.log('onAnimationComplete')}
           backgroundColor="#FE474C"
@@ -41,11 +41,11 @@ export default Score = (props) => {
           duration={1500} />
         <View style={styles.scoreView}>
           <Text style={styles.text}>Total Cards</Text>
-          <Text style={styles.title}>{totalCards}</Text>
+          <Text style={styles.title}>{cardsTotal}</Text>
           <Text style={styles.text}>Correct Answers</Text>
-          <Text style={styles.title}>{rights}</Text>
+          <Text style={styles.title}>{rightCounts}</Text>
         </View>
-        <Text style={styles.text}>{displayScoreMessage((rights / totalCards) * 100)}</Text>
+        <Text style={styles.text}>{displayScoreMessage((rightCounts / cardsTotal) * 100)}</Text>
         <Button
           block
           style={styles.button}

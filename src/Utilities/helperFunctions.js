@@ -12,14 +12,13 @@ export function createList(JsonDeckList) {
   return list
 }
 
-export function createTrueFalseJson(deck) {
-  console.log('DECK ' + JSON.stringify(deck))
-  let newJson = {}
+export function createTrueFalseArray(deck) {
+  let newArray = []
   for (let i = 0; i < deck.length; i++) {
-    newJson[deck[i].id] = false
+    newArray.push(false)
   }
-  console.log(JSON.stringify(newJson))
-  return newJson
+  console.log(JSON.stringify(newArray))
+  return newArray
 }
 
 export function displayScoreMessage(score) {

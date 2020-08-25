@@ -1,21 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'native-base'
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import CardFlip from 'react-native-card-flip';
 import { Audio } from 'expo-av';
-import LoadedImage from './LoadedImage'
+import LoadedImage from './LoadedImage';
+import FlipCard from 'react-native-flip-card'
 
-export default function FlipCard(props) {
-  const cardRef = useRef(props.cardId);
-  const [front, setFrontBack] = useState(true)
+export default function FlipFlashCard(props) {
+  const { flip, question, answer, answerImage, questionImage, updateShowButtons } = props
 
-  useEffect(() => {
-    props.showAnswer(!front)
-  }, [front])
-
-
-  flipSound = async (ref, show) => {
+  flipSound = async (show) => {
+    console.log(show)
     try {
       const { sound: soundObject, status } = await Audio.Sound.createAsync(
         require('../Assets/Sounds/Card-flip.mp3'),
@@ -24,38 +18,43 @@ export default function FlipCard(props) {
     } catch (error) {
       console.log(error)
     }
-    ref.current.flip()
-    setFrontBack(!show)
+    updateShowButtons(!show)
   }
 
   return (
     <View style={styles.container}>
-      <CardFlip style={styles.cardcontainer} ref={cardRef} >
-        <TouchableHighlight
-          activeOpacity={0.4}
-          underlayColor="#ff0000"
-          style={styles.card}
-          onLongPress={() => flipSound(cardRef, true)} >
+      <FlipCard
+        style={styles.cardcontainer}
+        friction={6}
+        perspective={800}
+        flipHorizontal={true}
+        flipVertical={false}
+        flip={flip}
+        clickable={true}
+        useNativeDriver={true}
+        alignHeight={true}
+        onFlipStart={(isFlipStart) => flipSound(isFlipStart)}
+      >
+        {/* Face Side */}
+        <View style={styles.card}>
           <View style={styles.cardContent}>
             <Text style={styles.question}>Question?</Text>
-            {props.question && <Text style={styles.text}>{props.question}</Text>}
-            {props.questionImage ? <LoadedImage imageRef={props.questionImage} type='cardImage' /> : <View style={styles.cardimage} />}
+            {question && <Text style={styles.text}>{question}</Text>}
+            {questionImage ? <LoadedImage imageRef={questionImage} type='cardImage' /> : <View style={styles.cardimage} />}
             <Text style={styles.bottonText} note>Press to see Answer</Text>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          activeOpacity={0.4}
-          underlayColor="#00ff00"
-          style={[styles.card, styles.flipCardBack]}
-          onLongPress={() => flipSound(cardRef, false)}>
+        </View>
+        {/* Back Side */}
+        <View style={[styles.card, styles.flipCardBack]}>
           <View style={styles.cardContent}>
             <Text style={styles.answer}>Answer</Text>
-            {props.answer && <Text style={styles.text}>{props.answer}</Text>}
-            {props.answerImage ? <LoadedImage imageRef={props.AnswerImage} type='cardImage' /> : <View style={styles.cardimage} />}
+            {answer && <Text style={styles.text}>{answer}</Text>}
+            {answerImage ? <LoadedImage imageRef={AnswerImage} type='cardImage' /> : <View style={styles.cardimage} />}
             <Text style={styles.bottonText} note>Press to return to Question</Text>
           </View>
-        </TouchableHighlight>
-      </CardFlip>
+        </View>
+      </FlipCard>
+
     </View>
   )
 }
