@@ -25,8 +25,8 @@ export default function FlipFlashCard(props) {
     <View style={styles.container}>
       <FlipCard
         style={styles.cardcontainer}
-        friction={6}
-        perspective={800}
+        friction={15}
+        perspective={3000}
         flipHorizontal={true}
         flipVertical={false}
         flip={flip}

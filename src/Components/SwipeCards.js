@@ -4,10 +4,12 @@ import { useFirebaseConnect } from 'react-redux-firebase'
 import { StyleSheet, Platform, Image, View, Text, Dimensions } from 'react-native'
 import { createList, createTrueFalseArray } from '../Utilities/helperFunctions'
 import FlipFlashCard from './FlipFlashCard';
+import { Audio } from 'expo-av';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { checkIos, wrongIos, checkAndroid, wrongAndroid, backAndroid, backIos } from '../Assets'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel'
+import FrontIcon from './FrontIcon';
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH);
@@ -51,6 +53,8 @@ export default function SwipeCards() {
   const [deck, setDeck] = useState(cards)
   const [rightCounts, setRightCounts] = useState(0)
   const [showButtons, setShowButtons] = useState(createTrueFalseArray(deck))
+  const [showIcon, setShowIcon] = useState(false)
+  const [rightAnswer, setRightAnswer] = useState(false)
 
   function updateShowButtons(show) {
     let newArray = [...showButtons];
@@ -58,15 +62,42 @@ export default function SwipeCards() {
     setShowButtons(newArray)
   }
 
+  playSound = async (right) => {
+    try {
+      if (right) {
+        const { sound: soundObject, status } = await Audio.Sound.createAsync(
+          require('../Assets/Sounds/Right-bell.mp3'),
+          { shouldPlay: true }
+        );
+      } else {
+        const { sound: soundObject, status } = await Audio.Sound.createAsync(
+          require('../Assets/Sounds/Wrong-buzzer.mp3'),
+          { shouldPlay: true }
+        );
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+    updateShowButtons(!show)
+  }
+
   let removeCardFromDeck = (right) => {
+    setRightAnswer(right)
+    setShowIcon(true)
+    playSound(right)
     const cardToRemove = deck[currentCardIndex].id
     setDeck(deck.filter(card => card.id !== cardToRemove))
     setShowButtons(createTrueFalseArray(deck))
     if (right) {
       setRightCounts(rightCounts + 1)
     }
-    //this.swiper.snapToItem(0, animated = true, fireCallback = true);
-    //setCurrentCardIndex(0)
+    this.swiper.snapToItem(0, animated = true, fireCallback = true);
+    setCurrentCardIndex(0)
+    setTimeout(() => {
+      setShowIcon(false)
+    }, 800);
+
   }
   const RenderCard = ({ item, index }) => {
     return (
@@ -86,17 +117,21 @@ export default function SwipeCards() {
     setDeck(cards)
     setRightCounts(0)
     setCurrentCardIndex(0)
-    navigation.navigate('Score', {
-      cardsTotal: cardsTotal,
-      rightCounts: rightCounts,
-      deckId: deckId,
-      deckTitle: deckTitle
-    })
+    setTimeout(() => {
+      navigation.navigate('Score', {
+        cardsTotal: cardsTotal,
+        rightCounts: rightCounts,
+        deckId: deckId,
+        deckTitle: deckTitle
+      })
+    }, 800);
+
   }
 
 
   return (
     <View style={styles.container}>
+      {showIcon && <FrontIcon right={rightAnswer} />}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
