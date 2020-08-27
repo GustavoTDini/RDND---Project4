@@ -6,23 +6,29 @@
 ## Description
 
 At start of the app, in the first start - you will be directed to the login page
+
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/login.PNG "Login Page")
 
 
 After login you will be sent to the DeckList screen - there you can select a deck, return to login page or create a new Deck
+
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/decklist.PNG "DeckList Page")
 
 Create new Deck Screen
+
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/newDeck.PNG "NewDeck Page")
 
 On the DeckDetails screen you can check the description, see how many people has viewed and if you have created this deck - you can delete or add more cards.
 Also, all logged users can start the deck to test your knowledge
+
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/deckdetail.PNG "Deckdetail Page")
 
 Add new card Screen
+
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/newCard.PNG "NewCard Page")
 
 On the swipeDeck screen the user can see all cards, and check the answer pressing the card
+
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/question.PNG "question")
 
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/answer.PNG "answer")
@@ -31,6 +37,7 @@ only after the answer was show, that the user can check if he got the answer cor
 each time the user check the answer - an animation is show and the card is removed from deck
 
 After all the cards are removed - the score screen is show, showing the corrected answers - the total, and a animation to show how many he/she got correct
+
 ![alt text](https://github.com/GustavoTDini/RDND---Project4/blob/master/ReadMeFIles/score.PNG "score")
 
 If the user get all corrected or none - a surprise will appear :)
