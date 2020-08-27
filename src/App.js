@@ -18,29 +18,36 @@ import SplashScreen from './Components/SplashScreen';
 import Score from './Components/Score'
 import * as Font from 'expo-font';
 
+// create the stackNavigator
 const Stack = createStackNavigator();
 
 const ANDROID = Platform.OS === 'android'
 
 export default function App() {
+  // load user and topics
   useFirebaseConnect('topics');
   useFirebaseConnect('users');
   const firebase = useFirebase()
+  //set splash for splashScreen
   const [splash, setSplash] = useState(true)
   const auth = useSelector(state => state.firebase.auth)
 
   useEffect(() => {
+    // create a local notification
     setLocalNotification()
+    // after 3sec hide splashScreen
     setTimeout(() => {
       setSplash(false)
     }, 3000);
     
+    // load required fonts for android - native-base create an error if don´t
     (async () => await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
     }))();
   }, [])
 
+  // function to load the splashScreen - wraps all other elements
   function Loading({ children }) {
     if (splash) return <SplashScreen />;
     return children
@@ -51,6 +58,7 @@ export default function App() {
       <Loading>
         <NavigationContainer>
           <Stack.Navigator
+          // on android shows a themed header
             screenOptions={{
               headerStyle: {
                 backgroundColor: ANDROID && '#3F51B5',
@@ -64,6 +72,7 @@ export default function App() {
                   name="DeckList"
                   component={DeckList}
                   options={{
+                    // on android shows a header with a logout icon
                     headerLeft: (props) => (
                       <Icon
                         {...props}
@@ -81,6 +90,7 @@ export default function App() {
                 <Stack.Screen
                   name="SwipeCards"
                   component={SwipeCards}
+                  // the swipe cards has no header
                   options={{
                     headerShown: false,
                   }} />
@@ -93,11 +103,13 @@ export default function App() {
                 <Stack.Screen
                   name="Score"
                   component={Score}
+                  // the score alse has no header
                   options={{
                     headerShown: false,
                   }} />
               </> :
               <>
+              {/* if not logged return to login */}
                 <Stack.Screen
                   name="Login"
                   component={Login}

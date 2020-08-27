@@ -8,26 +8,29 @@ import { Audio } from 'expo-av';
 import FrontAnimation from './FrontAnimation';
 
 export default Score = () => {
+  // get data from navigation
   const navigation = useNavigation()
   const route = useRoute()
   const {cardsTotal, rightCounts, deckId, deckTitle } = route.params;
   const [showIcon, setShowIcon] = useState(false)
 
+  // calculate the score
   const score = (rightCounts / cardsTotal) * 100
 
-
+  // function to return to decklist
   const navigateToDeckList = () => {
     navigation.navigate('DeckList')
   }
 
+  // function to restart the deck - send as data deckId and deckTitle - as when navigate from deckDetail
   const tryAgain = () => (
     navigation.navigate('SwipeCards', {
       deckId: deckId,
-      deckTitle: deckTitle,
-      restart: true
+      deckTitle: deckTitle
     })
   )
 
+  // playsounds if there´s a final animated element
   playSound = async (score) => {
     try {
       if (score === 0) {
@@ -47,7 +50,7 @@ export default Score = () => {
     }
   }
 
-
+  // check if the score is on a extreme - if 0 or 100 - show an animation
   const completeAnimation = () => {
     if (score === 0 || score === 100){
       setShowIcon(true)
@@ -57,7 +60,6 @@ export default Score = () => {
       setShowIcon(false)
     }, 5000);
   }
-
 
 
   return (

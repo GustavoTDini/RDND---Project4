@@ -2,13 +2,16 @@ import React, { useRef, useEffect } from 'react'
 import { StyleSheet, View, Dimensions, Animated } from 'react-native'
 import { thumbsUp, thumbsDown, bomb, fireworks, splashIcon } from '../Assets'
 
+// get screen values
 const TOTAL_WIDTH = Dimensions.get('window').width;
 const TOTAL_HEIGHT = Dimensions.get('window').height;
 
 
 export default function FrontAnimation(props) {
+  // the only props is the type of animation to render
   const { type } = props
 
+  // load the various constants using useRef
   const splashOpacity = useRef(new Animated.Value(0)).current;
   const splashScale = useRef(new Animated.Value(0)).current;
   const thumbUp = useRef(new Animated.Value(300)).current;
@@ -18,8 +21,8 @@ export default function FrontAnimation(props) {
   const bombScale = useRef(new Animated.Value(1)).current;
 
 
+  // useEffect to load at component render - depends on the type of the image - create a animation
   useEffect(() => {
-
     switch (type) {
       case 'thumbsUp':
         Animated.spring(thumbUp, {
@@ -83,6 +86,7 @@ export default function FrontAnimation(props) {
   }, []);
 
 
+  // animation styles for image - depending on type
   const animatedStyles = {
     splash: {
       ...styles.image,
@@ -128,6 +132,7 @@ export default function FrontAnimation(props) {
     },
   }
 
+  // load null image and style - depending on the type load a image from assets and style from animatedStyles
   let image = null
   let style = null
 

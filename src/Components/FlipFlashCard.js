@@ -1,13 +1,15 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'native-base'
 import { Audio } from 'expo-av';
-import LoadedImage from './LoadedImage';
 import FlipCard from 'react-native-flip-card'
+import LoadedImage from './LoadedImage';
 
 export default function FlipFlashCard(props) {
+  // save props in constante
   const { flip, question, answer, answerImage, questionImage, updateShowButtons } = props
 
+  // 
   flipSound = async (show) => {
     console.log(show)
     try {
@@ -49,12 +51,11 @@ export default function FlipFlashCard(props) {
           <View style={styles.cardContent}>
             <Text style={styles.answer}>Answer</Text>
             {answer && <Text style={styles.text}>{answer}</Text>}
-            {answerImage ? <LoadedImage imageRef={AnswerImage} type='cardImage' /> : <View style={styles.cardimage} />}
+            {answerImage ? <LoadedImage imageRef={answerImage} type='cardImage' /> : <View style={styles.cardimage} />}
             <Text style={styles.bottonText} note>Press to return to Question</Text>
           </View>
         </View>
       </FlipCard>
-
     </View>
   )
 }

@@ -6,17 +6,22 @@ import { SvgUri } from 'react-native-svg'
 import {  placeholder } from '../Assets'
 
 export default Thumbnail = (props) => {
+  // get the topic from props and firebase redux - have already been loader
   const topic = useSelector(state => state.firebase.data.topics[props.topic])
 
+  // get firebase instance
   const firebase = useFirebase()
   const [iconUrl, setIconUrl] = useState(null)
 
+  // on component render load the thumbnail image
   useEffect(() => {
     getAndLoadHttpUrl()
   }, [topic])
 
   async function getAndLoadHttpUrl() {
+    // get the reference from firebase
     const iconreference = firebase.storage().ref(topic.icon);
+    // download and setimage to url
     iconreference.getDownloadURL().then(url => {
       setIconUrl(url)
     }).catch(error => {

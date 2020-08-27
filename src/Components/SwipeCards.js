@@ -1,34 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Platform, Image, View, Text, Dimensions } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect } from 'react-redux-firebase'
-import { StyleSheet, Platform, Image, View, Text, Dimensions } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Audio } from 'expo-av';
+import Carousel from 'react-native-snap-carousel'
+import { checkIos, wrongIos, checkAndroid, wrongAndroid, backAndroid, backIos } from '../Assets'
 import { createList, createTrueFalseArray } from '../Utilities/helperFunctions'
 import FlipFlashCard from './FlipFlashCard';
-import { Audio } from 'expo-av';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { checkIos, wrongIos, checkAndroid, wrongAndroid, backAndroid, backIos } from '../Assets'
-import { useNavigation, useRoute } from '@react-navigation/native';
-import Carousel from 'react-native-snap-carousel'
 import FrontAnimation from './FrontAnimation';
 
+//get screen sizes
 const SLIDER_WIDTH = Dimensions.get('window').width;
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH);
 const TOTAL_HEIGHT = Dimensions.get('window').height;
-const ITEM_HEIGHT = Math.round(TOTAL_HEIGHT * 4 / 5);
-const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 export default function SwipeCards() {
+  // get data from navigation
   const navigation = useNavigation()
   const route = useRoute()
   const { deckId, deckTitle } = route.params;
 
+  // useEffect to force rerender when cardIndex or deck changes
   useEffect(() => {
   }, [currentCardIndex, deck])
 
+  // get data from firebase
   useFirebaseConnect(`decks/${deckId}`)
   const cards = useSelector(state => createList(state.firebase.data.decks[deckId].cards))
   const cardsTotal = cards.length
 
+  // if the current deck is empty return a element to warn that
   if (cardsTotal === 0) {
     return (
       <View style={styles.container}>
@@ -49,19 +51,27 @@ export default function SwipeCards() {
     )
   }
 
+  // creat elements to handle the game flow
+  // get the current showCard
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
+  // create the showing deck - with answered cards removed
   const [deck, setDeck] = useState(cards)
+  // get all the right counts
   const [rightCounts, setRightCounts] = useState(0)
+  // create a array with to manage the showbuttons
   const [showButtons, setShowButtons] = useState(createTrueFalseArray(deck))
-  const [showIcon, setShowIcon] = useState(false)
+  // control to show the right wrong animation
+  const [showAnimation, setShowAnimation] = useState(false)
   const [rightAnswer, setRightAnswer] = useState(false)
 
+  // function that is passed as a prop to flipFlashCard - to control the show buttons
   function updateShowButtons(show) {
     let newArray = [...showButtons];
     newArray[currentCardIndex] = show
     setShowButtons(newArray)
   }
 
+  // function to play sound when answe is right or wrong
   playSound = async (right) => {
     try {
       if (right) {
@@ -81,23 +91,29 @@ export default function SwipeCards() {
     }
   }
 
+  // after a card is answered - right or wrong - that card is removed
   let removeCardFromDeck = (right) => {
     setRightAnswer(right)
-    setShowIcon(true)
+    setShowAnimation(true)
     playSound(right)
     const cardToRemove = deck[currentCardIndex].id
     setDeck(deck.filter(card => card.id !== cardToRemove))
     setShowButtons(createTrueFalseArray(deck))
+    // if right - increment rightCounts
     if (right) {
       setRightCounts(rightCounts + 1)
     }
+    // return to first card
     this.swiper.snapToItem(0, animated = true, fireCallback = true);
     setCurrentCardIndex(0)
+    //after a second - the animation is hided 
     setTimeout(() => {
-      setShowIcon(false)
-    }, 800);
+      setShowAnimation(false)
+    }, 1000);
 
   }
+
+  // the element to render in the deck swiper - it´s a FlipFlashCard wrapped in a View
   const RenderCard = ({ item, index }) => {
     return (
       <View style={styles.card}>
@@ -112,10 +128,14 @@ export default function SwipeCards() {
     );
   }
 
+  // when deck length equals zero = navigate to score
   if (deck.length === 0) {
+    // reset the game elements - case the user return
     setDeck(cards)
     setRightCounts(0)
     setCurrentCardIndex(0)
+    // after a second - wait for the animation - go to score - send as data / the total cards / rightCounts
+    // alse send decKId and deckTitle - in case the user choose to try again
     setTimeout(() => {
       navigation.navigate('Score', {
         cardsTotal: cardsTotal,
@@ -123,14 +143,14 @@ export default function SwipeCards() {
         deckId: deckId,
         deckTitle: deckTitle
       })
-    }, 800);
+    }, 1000);
 
   }
 
 
   return (
     <View style={styles.container}>
-      {showIcon && <FrontAnimation type={rightAnswer? 'thumbsUp' : 'thumbsDown'} />}
+      {showAnimation && <FrontAnimation type={rightAnswer ? 'thumbsUp' : 'thumbsDown'} />}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
@@ -143,7 +163,6 @@ export default function SwipeCards() {
           <Text style={styles.messages} note>{deck.length} Questions Left</Text>
         </View>
       </View>
-
       <View style={styles.main}>
         <Carousel
           ref={swiper => {
@@ -153,14 +172,13 @@ export default function SwipeCards() {
           containerCustomStyle={{ flex: 1 }}
           slideStyle={{ flex: 1 }}
           renderItem={RenderCard}
-          sliderWidth={viewportWidth}
-          itemWidth={viewportWidth}
-          slideStyle={{ width: viewportWidth }}
+          sliderWidth={SLIDER_WIDTH}
+          itemWidth={SLIDER_WIDTH}
+          slideStyle={{ width: SLIDER_WIDTH }}
           layout='tinder'
           onScrollIndexChanged={(index) => setCurrentCardIndex(index)}
         />
       </View>
-
       <View style={styles.footer}>
         {showButtons[currentCardIndex] &&
           <View style={styles.answerView}>
@@ -201,7 +219,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: SLIDER_WIDTH,
     height: 40,
-    top:10,
+    top: 10,
     zIndex: -1,
     ...Platform.select({
       ios: {
@@ -294,5 +312,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  noMoreCardText:{
+    fontSize: 24
+  }
 
 });

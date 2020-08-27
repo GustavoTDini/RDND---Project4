@@ -10,9 +10,10 @@ import middleware from './src/ReduxStore/middleware'
 import { Root } from 'native-base'
 
 
-
+// create firebase redux Store
 const store = createStore(reducer, middleware)
 
+// firebase configuration
 const rrfProps = {
   firebase,
   config: {

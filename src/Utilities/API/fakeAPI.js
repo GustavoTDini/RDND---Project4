@@ -1,3 +1,4 @@
+// js used to simulate a databse in the begining of development - prior to implement firebase
 
 let decks = {
   bd76cbeac1b146c2aed53ad53abb28ba:
@@ -200,12 +201,3 @@ export function _getTypes() {
     setTimeout(() => res({ ...types }), 1000)
   })
 }
-
-//<span>Photo by <a href="https://unsplash.com/@antoine1003?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Antoine Dautry</a> on <a href="https://unsplash.com/s/photos/math?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
-//<span>Photo by <a href="https://unsplash.com/@flowforfrank?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Ferenc Almasi</a> on <a href="https://unsplash.com/s/photos/react?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
-//<span>Photo by <a href="https://unsplash.com/@thisisengineering?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">ThisisEngineering RAEng</a> on <a href="https://unsplash.com/s/photos/coding-database?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
-//<span>Photo by <a href="https://unsplash.com/@f7photo?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Michael Longmire</a> on <a href="https://unsplash.com/s/photos/science?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
-//<a href="https://iconscout.com/icons/questionnaire" target="_blank">Questionnaire Icon</a> by <a href="https://iconscout.com/contributors/jemismali">Jemis Mali</a> on <a href="https://iconscout.com">Iconscout</a>
-//<a href='https://br.freepik.com/vetores/verde'>Verde vetor criado por freepik - br.freepik.com</a>
-//<a href="https://iconscout.com/icons/chevron-left" target="_blank">Chevron Left Icon</a> by <a href="https://iconscout.com/contributors/fatkhulkarim">Fatkhul Karim</a> on <a href="https://iconscout.com">Iconscout</a>
-//Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>

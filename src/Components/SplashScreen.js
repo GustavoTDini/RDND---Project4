@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Container, Content } from 'native-base';
 import FrontAnimation from './FrontAnimation';
 
-
+// simple splashScreen element = uses the FrontAnimation Component
 export default function SplashScreen() {
 
   return (

@@ -1,3 +1,5 @@
+// app constants
+
 export const IOS_BUTTONS = ["Camera", "Images", "Cancel"];
 
 export const ANDROID_BUTTONS = [

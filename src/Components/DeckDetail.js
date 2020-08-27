@@ -1,33 +1,41 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase'
 import { StyleSheet, Platform, Alert } from 'react-native'
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Container, Content, Card, CardItem, Body, Text, Left, Button, H2, Right, View, Spinner} from 'native-base';
+import { formatTime,   clearLocalNotification, setLocalNotification } from '../Utilities/helperFunctions'
 import Thumbnail from './Thumbnail'
 import LoadedImage from './LoadedImage';
-import { formatTime,   clearLocalNotification, setLocalNotification } from '../Utilities/helperFunctions'
-import { useNavigation, useRoute } from '@react-navigation/native';
+
 
 export default function DeckDetail() {
+  // get data from navigation
   const navigation = useNavigation()
   const route = useRoute()
   const { deckId } = route.params
+  // get data from firebase
   useFirebaseConnect(`decks/${deckId}`)
   const firebase = useFirebase()
   const deck = useSelector(state => state.firebase.data.decks[deckId])
   const userId = useSelector(state => state.firebase.auth.uid)
   const [deleted, setDeleted] = useState(false)
   
+  // function to navigate to add card - send as data the current deckId
   const navigateToAddCard = () => (
     navigation.navigate('AddNewCard', {
       deckId: deckId
     })
   )
 
+  // function to navigate to add card - send as data the current deckId
   navigateToCards = () => {
+    // clear notifications if start a deck
     clearLocalNotification().then(setLocalNotification)
+    // add a new view to deck
     const addedViewsNumber = deck.views_number + 1
     firebase.update(`decks/${deckId}`, {views_number:addedViewsNumber})
+    // navigate to deck swipe - send as data the deckId to find the cards, and the title
     navigation.navigate('SwipeCards', {
       deckId: deckId,
       deckTitle: deck.title
@@ -35,6 +43,7 @@ export default function DeckDetail() {
 
   }
 
+  // if the author tries to delete the deck - he/she receives a confirmation warning
   const createConfirmAlert = () =>
     Alert.alert(
       "Warning",
@@ -55,6 +64,7 @@ export default function DeckDetail() {
   }
 
   if (deleted) {
+    // to avoid a null in the decklist - I added a delay to certifies that the deck is deleted in database
     setTimeout(() => {
       navigation.navigate('DeckList')
     }, 500);
@@ -64,6 +74,7 @@ export default function DeckDetail() {
 
   return (
     <Container>
+      {/* when deleted show a spinner to avoid that the user think is a crash */}
       {deleted && <Spinner color='blue'/>}
       {!deleted &&
         <Content style={styles.background}>

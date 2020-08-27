@@ -4,16 +4,20 @@ import { useFirebase } from 'react-redux-firebase'
 import { placeholder } from '../Assets'
 
 export default LoadedImage = (props) => {
-
+  // get image ref from props
+  const { imageRef } = props
   const [imageUrl, setImageUrl] = useState(null)
   const firebase = useFirebase()
 
+  // on component render load the image
   useEffect(() => {
     getAndLoadHttpUrl()
   }, [])
 
   async function getAndLoadHttpUrl() {
-    const imageReference = firebase.storage().ref(props.imageRef);
+    // get the reference from firebase
+    const imageReference = firebase.storage().ref(imageRef);
+    // download and setimage to url
     imageReference.getDownloadURL().then(url => {
       setImageUrl(url)
     }).catch(error => {
@@ -21,6 +25,7 @@ export default LoadedImage = (props) => {
     })
   }
 
+  // if there´s no image to load - show a placeholder
   return (
     imageUrl === null ?
       <Image source={placeholder} style={styles.image} /> :

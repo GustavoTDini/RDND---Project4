@@ -1,27 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux'
 import { Audio } from 'expo-av';
 import { StyleSheet, View } from 'react-native'
-import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase'
+import { useFirebase } from 'react-redux-firebase'
 import { Container, Form, Item, Input, Label, Text, Button, Content, Toast, H1, H3 } from 'native-base'
 import { formatNewUser } from '../Utilities/helperFunctions';
 import FlipCard from 'react-native-flip-card'
 
 export default function Login() {
+  // get firebase instance
   const firebase = useFirebase()
 
+  // creat const to the diferents inputs
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [login, setLoginCreate] = useState(true)
+
+  // create a flip element to title
   const [flip, setFlip] = useState(false)
 
+  // after 1500ms - flip the title to show -  indicating how the app works
   useEffect(() => {
     setTimeout(() => {
       setFlip(true)
     }, 1500);
   }, [])
 
+  flipSound = async () => {
+    try {
+      const { sound: soundObject, status } = await Audio.Sound.createAsync(
+        require('../Assets/Sounds/Card-flip.mp3'),
+        { shouldPlay: true }
+      );
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // function to use firebase to login a user
   function loginWithEmail() {
     firebase.login({
       email: email,
@@ -37,17 +53,7 @@ export default function Login() {
       )
   }
 
-  flipSound = async () => {
-    try {
-      const { sound: soundObject, status } = await Audio.Sound.createAsync(
-        require('../Assets/Sounds/Card-flip.mp3'),
-        { shouldPlay: true }
-      );
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
+  // function to use firebase to create a new user with email and password
   function createNewUserEmail() {
     firebase.createUser(
       { email, password },
