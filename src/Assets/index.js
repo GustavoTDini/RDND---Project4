@@ -8,3 +8,5 @@ export const backAndroid = require('./Icons/android-back-arrow.png');
 export const backIos = require('./Icons/ios-back-arrow.png');
 export const thumbsUp = require('./Icons/ThumbsUp.png')
 export const thumbsDown = require('./Icons/ThumbsDown.png')
+export const bomb = require('./Icons/bomb.png')
+export const fireworks = require('./Icons/fireworks.png')

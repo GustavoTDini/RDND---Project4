@@ -1,14 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Container, Content, Text, Button } from 'native-base'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { displayScoreMessage } from '../Utilities/helperFunctions'
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Audio } from 'expo-av';
+import FrontAnimation from './FrontAnimation';
 
 export default Score = () => {
   const navigation = useNavigation()
   const route = useRoute()
   const {cardsTotal, rightCounts, deckId, deckTitle } = route.params;
+  const [showIcon, setShowIcon] = useState(false)
+
+  const score = (rightCounts / cardsTotal) * 100
+
 
   const navigateToDeckList = () => {
     navigation.navigate('DeckList')
@@ -22,18 +28,49 @@ export default Score = () => {
     })
   )
 
+  playSound = async (score) => {
+    try {
+      if (score === 0) {
+        const { sound: soundObject, status } = await Audio.Sound.createAsync(
+          require('../Assets/Sounds/Ticking-bomb.mp3'),
+          { shouldPlay: true }
+        );
+      } else if (score === 100) {
+        const { sound: soundObject, status } = await Audio.Sound.createAsync(
+          require('../Assets/Sounds/Magical-explosion.mp3'),
+          { shouldPlay: true }
+        );
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const completeAnimation = () => {
+    if (score === 0 || score === 100){
+      setShowIcon(true)
+      playSound(score)
+    }
+    setTimeout(() => {
+      setShowIcon(false)
+    }, 5000);
+  }
+
 
 
   return (
     <Container style={styles.container}>
+      {showIcon && <FrontAnimation type={score === 0 ? 'bomb' : score === 100? 'fireworks': ''} />}
       <Content contentContainerStyle={styles.content}>
         <Text style={styles.title}>Score</Text>
         <AnimatedCircularProgress
           size={280}
           width={30}
-          fill={(rightCounts / cardsTotal) * 100}
+          fill={score}
           tintColor="green"
-          onAnimationComplete={() => console.log('onAnimationComplete')}
+          onAnimationComplete={() => completeAnimation()}
           backgroundColor="#FE474C"
           arcSweepAngle={240}
           rotation={240}
@@ -45,7 +82,7 @@ export default Score = () => {
           <Text style={styles.text}>Correct Answers</Text>
           <Text style={styles.title}>{rightCounts}</Text>
         </View>
-        <Text style={styles.text}>{displayScoreMessage((rightCounts / cardsTotal) * 100)}</Text>
+        <Text style={styles.text}>{displayScoreMessage(score)}</Text>
         <Button
           block
           style={styles.button}

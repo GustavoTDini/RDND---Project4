@@ -5,7 +5,7 @@ import { StyleSheet, Platform, Alert } from 'react-native'
 import { Container, Content, Card, CardItem, Body, Text, Left, Button, H2, Right, View, Spinner} from 'native-base';
 import Thumbnail from './Thumbnail'
 import LoadedImage from './LoadedImage';
-import { formatTime } from '../Utilities/helperFunctions'
+import { formatTime,   clearLocalNotification, setLocalNotification } from '../Utilities/helperFunctions'
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function DeckDetail() {
@@ -25,6 +25,7 @@ export default function DeckDetail() {
   )
 
   navigateToCards = () => {
+    clearLocalNotification().then(setLocalNotification)
     const addedViewsNumber = deck.views_number + 1
     firebase.update(`decks/${deckId}`, {views_number:addedViewsNumber})
     navigation.navigate('SwipeCards', {

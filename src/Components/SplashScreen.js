@@ -1,27 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import { StyleSheet, Image, View, Animated } from 'react-native'
+import React from 'react'
+import { StyleSheet } from 'react-native'
 import { Container, Content } from 'native-base';
-import { splashIcon } from '../Assets'
+import FrontAnimation from './FrontAnimation';
+
 
 export default function SplashScreen() {
-
-  const opacity = new Animated.Value(0);
-
-  useEffect(() => {
-    Animated.spring(opacity, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: true
-    }).start();
-  }, []);
 
   return (
     <Container>
       <Content contentContainerStyle={styles.content}>
-        <Animated.Image 
-          source = {splashIcon} 
-          style = {{opacity}} 
-          resizeMode='center'/>
+        <FrontAnimation/>
       </Content>
     </Container>
   )

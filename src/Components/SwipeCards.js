@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { checkIos, wrongIos, checkAndroid, wrongAndroid, backAndroid, backIos } from '../Assets'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel'
-import FrontIcon from './FrontIcon';
+import FrontAnimation from './FrontAnimation';
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH);
@@ -79,7 +79,6 @@ export default function SwipeCards() {
     } catch (error) {
       console.log(error)
     }
-    updateShowButtons(!show)
   }
 
   let removeCardFromDeck = (right) => {
@@ -131,7 +130,7 @@ export default function SwipeCards() {
 
   return (
     <View style={styles.container}>
-      {showIcon && <FrontIcon right={rightAnswer} />}
+      {showIcon && <FrontAnimation type={rightAnswer? 'thumbsUp' : 'thumbsDown'} />}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
@@ -141,10 +140,10 @@ export default function SwipeCards() {
         </TouchableOpacity>
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.title}>{deckTitle}</Text>
-          <Text style={styles.title} note>{deck.length} Questions Left</Text>
+          <Text style={styles.messages} note>{deck.length} Questions Left</Text>
         </View>
-
       </View>
+
       <View style={styles.main}>
         <Carousel
           ref={swiper => {
@@ -161,10 +160,11 @@ export default function SwipeCards() {
           onScrollIndexChanged={(index) => setCurrentCardIndex(index)}
         />
       </View>
+
       <View style={styles.footer}>
         {showButtons[currentCardIndex] &&
           <View style={styles.answerView}>
-            <Text>Did you get it Right?</Text>
+            <Text style={styles.messages}>Did you get it Right?</Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 onPress={() => {
@@ -198,9 +198,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#e6e6e6',
   },
   header: {
-    position: 'relative',
+    position: 'absolute',
+    width: SLIDER_WIDTH,
+    height: 40,
+    top:10,
     zIndex: -1,
-    flex: 1,
     ...Platform.select({
       ios: {
         margin: 24,
@@ -213,12 +215,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   backIconIOS: {
+    zIndex: 10,
     height: 45,
     width: 45,
     margin: 10,
     marginStart: 0
   },
   icon: {
+    zIndex: 10,
     ...Platform.select({
       ios: {
         height: 60,
@@ -232,53 +236,61 @@ const styles = StyleSheet.create({
     }),
   },
   title: {
-    marginStart: 16,
     alignItems: 'center',
     textAlignVertical: "center",
     justifyContent: 'flex-start',
     textAlign: 'center',
     fontSize: 20
   },
-  noMoreCardText: {
-    fontWeight: '700',
-    fontSize: 18,
+  messages: {
+    fontWeight: '400',
+    fontSize: 14,
     color: 'gray'
   },
   main: {
-    flex: 10,
+    marginTop: 60,
+    marginBottom: 160,
+    height: TOTAL_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
   },
   card: {
     flex: 1,
-    padding: 50,
-    marginTop: -50,
+    padding: 25,
     width: SLIDER_WIDTH,
     height: TOTAL_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
   },
   footer: {
-    position: 'relative',
-    zIndex: -1,
+    ...Platform.select({
+      android: {
+        paddingTop: 20,
+      }
+    }),
+    backgroundColor: 'rgba(0,0,0,0)',
+    position: 'absolute',
+    bottom: 0,
+    height: 100,
+    zIndex: 5,
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   answerView: {
-
     flexDirection: 'column',
     textAlign: 'center',
     alignItems: 'center',
     fontSize: 20
   },
   buttonContainer: {
+    paddingHorizontal: 30,
     ...Platform.select({
       ios: {
         marginTop: 10
       }
     }),
-    width: 300,
+    width: SLIDER_WIDTH,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

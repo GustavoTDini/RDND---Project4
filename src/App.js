@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler';
-import { Platform, Button } from 'react-native'
+import { Platform } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Container, Icon } from 'native-base';
 import Login from './Components/Login';
+import { setLocalNotification } from './Utilities/helperFunctions'
 import { useFirebaseConnect, isLoaded, isEmpty, useFirebase } from 'react-redux-firebase'
 import DeckList from './Components/DeckList';
 import DeckDetail from './Components/DeckDetail'
@@ -29,10 +30,11 @@ export default function App() {
   const auth = useSelector(state => state.firebase.auth)
 
   useEffect(() => {
+    setLocalNotification()
     setTimeout(() => {
       setSplash(false)
     }, 3000);
-
+    
     (async () => await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
